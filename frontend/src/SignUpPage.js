@@ -128,8 +128,13 @@ function SignUpPage()
         // else
         // {
             axios.post('/user/signup',userData)
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+                console.log('Enter proper data');
+            })
         // }
     }
 

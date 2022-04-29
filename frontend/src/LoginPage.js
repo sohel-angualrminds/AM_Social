@@ -41,11 +41,7 @@ function LoginPage()
 
     const [clickLogin,setClickLogin] = React.useState(false)
 
-    const [userLoginData,setuserLoginData] = React.useState({
-        email:'',
-        password:'',
-        reCaptchaToken:""
-    })
+  
 
     const responseGoogle = (response) => {
         console.log(response);
@@ -53,18 +49,37 @@ function LoginPage()
 
     const loginHandler = async() => {
         setClickLogin(true)
-        const token = await recaptchaRef.current.executeAsync()
-        setuserLoginData({
-            email : loginData.email,
-            password : loginData.password,
-            reCaptchaToken : token
+
+        // const token = await recaptchaRef.current.executeAsync()
+        
+        // setLoginData(prev => {
+        //     return {
+        //         ...prev,
+        //         recaptchaRef : token
+        //     }
+        // })
+
+        console.log(loginData)
+        // console.log(token)
+
+        axios.post('/user/login',loginData)
+        .then(response => {
+            console.log(response)
+            console.log(response.data.token);
+            localStorage.setItem('token1',JSON.stringify(response.data.token))
+            const temp = () => navigate('/mainpage')
+            temp()
         })
-        console.log(token)
-        axios.post('/user/login',userLoginData)
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
-        // navigate('/mainpage')
+        .catch(error => {
+            console.log(error)
+            console.log('Enter proper data')
+        })
+        
     }
+
+    // const getRequestHandler = () => {
+        
+    // }
 
     return (
         <div>
