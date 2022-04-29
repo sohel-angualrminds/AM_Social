@@ -34,6 +34,9 @@ const profile_schema = new mongoose.Schema({
     image: {
         type: String
     },
+    mobileNumber: {
+        type: String
+    },
     userID: {
         type: String,
         required: true
@@ -41,5 +44,5 @@ const profile_schema = new mongoose.Schema({
 });
 
 
-const profilemodel = mongoose.Model('USER', profile_schema);
+const profilemodel = mongoose.model('PROFILE', profile_schema);
 module.exports = profilemodel;

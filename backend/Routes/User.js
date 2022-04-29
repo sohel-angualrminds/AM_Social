@@ -81,10 +81,10 @@ UserRouter.post("/login", async (req, res) => {
 UserRouter.post('/signup', async (req, res) => {
     try {
         const { firstName, lastName, email, password, cpassword } = req.body;
-        
+
         let { error } = userValidation(req.body);
-        
-        
+
+
         if (error) {
             return res.status(400).send({
                 success: false,
@@ -124,7 +124,7 @@ UserRouter.post('/signup', async (req, res) => {
 
     } catch (err) {
         console.error("signup Error " + err);
-        return res.status(500).send({ success: false, message: 'internal error' });
+        return res.status(500).send({ success: false, message: 'internal error', error: err, });
     }
 });
 
