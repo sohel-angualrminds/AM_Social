@@ -14,13 +14,11 @@ const { userValidation } = require('../middleware/validation');
 //importing jwt for authentication
 const jwt = require('jsonwebtoken');
 
-
 const generateTokens = (user) => {
     return jwt.sign({ id: user._id, email: user.email, name: user.name }, process.env.SECRETE_KEY, {
         expiresIn: "86400s"
     });
 }
-
 
 /*
     USAGE : for user signin
@@ -83,7 +81,10 @@ UserRouter.post("/login", async (req, res) => {
 UserRouter.post('/signup', async (req, res) => {
     try {
         const { firstName, lastName, email, password, cpassword } = req.body;
+        
         let { error } = userValidation(req.body);
+        
+        
         if (error) {
             return res.status(400).send({
                 success: false,
