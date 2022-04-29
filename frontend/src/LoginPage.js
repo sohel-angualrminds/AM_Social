@@ -52,15 +52,8 @@ function LoginPage()
 
         // const token = await recaptchaRef.current.executeAsync()
         
-        // setLoginData(prev => {
-        //     return {
-        //         ...prev,
-        //         recaptchaRef : token
-        //     }
-        // })
 
         console.log(loginData)
-        // console.log(token)
 
         axios.post('/user/login',loginData)
         .then(response => {
@@ -76,10 +69,6 @@ function LoginPage()
         })
         
     }
-
-    // const getRequestHandler = () => {
-        
-    // }
 
     return (
         <div>
