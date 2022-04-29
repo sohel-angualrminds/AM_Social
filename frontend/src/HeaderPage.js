@@ -1,10 +1,103 @@
 import React from 'react'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Toolbar from '@mui/material/Toolbar'
+import Avatar from '@mui/material/Avatar'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
+import { useNavigate } from 'react-router-dom'
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 
 function HeaderPage() 
 {
-  return (
-    <div>HeaderPage</div>
-  )
+
+    const navigate = useNavigate()
+
+    const [anchorEl, setAnchorEl] = React.useState(null)
+    const open = Boolean(anchorEl)
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
+    }
+    const handleClose = () => {
+        setAnchorEl(null)
+    }
+
+    const [open2, setOpen2] = React.useState(false);
+    const handleOpen2 = () => setOpen2(true);
+    const handleClose2 = () => setOpen2(false);
+
+    return (
+        <div>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar >
+                        <Avatar sx={{ marginLeft : '85%' }} onClick={handleClick}>N</Avatar>
+                        <label>Name</label>
+                    </Toolbar>
+                </AppBar>
+
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={() => {
+                        handleClose()
+                        navigate('/editpage')
+                    }}>
+                        Edit Profile
+                    </MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClose()
+                        handleOpen2()
+                    }}>
+                        Change Password
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                </Menu>
+
+                <Modal
+                    open={open2}
+                    onClose={handleClose2}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={style}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                           Change Password
+                        </Typography>
+                        <TextField id="outlined-basic" label="Current Password" variant="outlined" />
+                        <br />
+                        <TextField id="outlined-basic" label="New Password" variant="outlined" />
+                        <br />
+                        <TextField id="outlined-basic" label="Confirm Password" variant="outlined" />
+                        <br />
+                        <Button variant="contained">Set New Password</Button>
+                    </Box>
+                </Modal>
+            </Box>
+        </div>
+    )
 }
 
 export default HeaderPage

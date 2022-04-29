@@ -3,9 +3,17 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { GoogleLogin } from 'react-google-login'
+import { useNavigate } from 'react-router-dom'
+import ReCAPTCHA from "react-google-recaptcha"
+import axios from 'axios'
+
 
 function LoginPage() 
 {
+    const navigate = useNavigate()
+
+    const recaptchaRef = React.useRef();
+
     const [loginData,setLoginData] = React.useState({
         email : '',
         password : ''
@@ -33,8 +41,29 @@ function LoginPage()
 
     const [clickLogin,setClickLogin] = React.useState(false)
 
+    const [userLoginData,setuserLoginData] = React.useState({
+        email:'',
+        password:'',
+        reCaptchaToken:""
+    })
+
     const responseGoogle = (response) => {
         console.log(response);
+    }
+
+    const loginHandler = async() => {
+        setClickLogin(true)
+        const token = await recaptchaRef.current.executeAsync()
+        setuserLoginData({
+            email : loginData.email,
+            password : loginData.password,
+            reCaptchaToken : token
+        })
+        console.log(token)
+        axios.post('/user/login',userLoginData)
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
+        // navigate('/mainpage')
     }
 
     return (
@@ -73,7 +102,13 @@ function LoginPage()
                     helperText={ clickLogin && loginData.password ===  "" ? "Enter Password " : '' }
                 />
                 <br />
-                <Button variant="contained" onClick={ () => setClickLogin(true) }>Login</Button>
+                <ReCAPTCHA 
+                    ref={recaptchaRef} 
+                    size="invisible" 
+                    sitekey="6Ld3COIZAAAAAC3A_RbO1waRz6QhrhdObYOk7b_5" 
+                />
+                <br />
+                <Button variant="contained" onClick={ () => loginHandler()}>Login</Button>
                 <br />
                 <GoogleLogin
                     clientId="971623344603-0qquan9pcdb9iu7oq9genvpnel77i7oa.apps.googleusercontent.com"
@@ -82,7 +117,11 @@ function LoginPage()
                     onFailure={responseGoogle}
                     cookiePolicy={'single_host_origin'}
                 />
+                <br />
+                <Button variant="contained" onClick={ () => navigate('/signuppage')}>SignUp</Button>
+                
             </Box>
+            
         </div>
     )
 }
