@@ -15,8 +15,7 @@ function SignUpPage()
         firstName : '',
         lastName : '',
         email : '',
-        password : '',
-        cpassword : ''
+        password : ''
     })
 
     const firstNameHandler = (e) => {
@@ -59,15 +58,7 @@ function SignUpPage()
         })
     }
 
-    const confirmPasswordHandler = (e) => {
-        console.log(e.target.value)
-        setUserData(prev => {
-            return {
-                ...prev,
-                cpassword : e.target.value
-            }
-        })
-    }
+    
 
     const [clickSignUp,setClickSignUp] = React.useState(false)
 
@@ -110,18 +101,11 @@ function SignUpPage()
             setCheckPassword('')
         }
 
-        if(userData.password !== userData.cpassword)
-        {
-            setCheckConfirmPassword('password and confirm password is similar')
-        }
-        else
-        {
-            setCheckConfirmPassword('')
-        }
+        
 
         console.log(userData)
 
-        // if(userData.firstName ==='' && userData.lastName==='' && userData.email==='' && userData.password ==='' && userData.cpassword !== '')
+        // if(userData.firstName ==='' || userData.lastName==='' || userData.email==='' || userData.password ==='' || userData.cpassword !== '')
         // {
         //     console.log('Enter proper data');
         // }
@@ -197,18 +181,6 @@ function SignUpPage()
                 />
                 <br />
                 <span style={{color:"red"}}>{ checkPassword !== "" && checkPassword }</span>
-                <br />
-                <TextField 
-                    id="filled-basic" 
-                    label="Confirm Password *" 
-                    variant="filled" 
-                    value={userData.cpassword} 
-                    onChange={(e) => confirmPasswordHandler(e)} 
-                    error={ clickSignUp && userData.cpassword === '' ? true : false }
-                    helperText={ clickSignUp && userData.cpassword === '' ? "Enter Password " : ''}
-                />
-                <br />
-                    <span style={{color:"red"}}>{ checkConfirmPassword !== "" && checkConfirmPassword }</span>
                 <br />
                 <Button variant="contained" onClick={ () => signUpButtonHandler() }>Sign Up</Button>
                 <br />
