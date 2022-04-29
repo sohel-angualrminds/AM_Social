@@ -3,9 +3,12 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { GoogleLogin } from 'react-google-login'
+import { useNavigate } from 'react-router-dom'
 
 function LoginPage() 
 {
+    const navigate = useNavigate()
+
     const [loginData,setLoginData] = React.useState({
         email : '',
         password : ''
@@ -73,7 +76,12 @@ function LoginPage()
                     helperText={ clickLogin && loginData.password ===  "" ? "Enter Password " : '' }
                 />
                 <br />
-                <Button variant="contained" onClick={ () => setClickLogin(true) }>Login</Button>
+                <Button variant="contained" onClick={ () => {
+                    setClickLogin(true)
+                    navigate('/mainpage')
+                }}>
+                    Login
+                </Button>
                 <br />
                 <GoogleLogin
                     clientId="971623344603-0qquan9pcdb9iu7oq9genvpnel77i7oa.apps.googleusercontent.com"
@@ -83,6 +91,7 @@ function LoginPage()
                     cookiePolicy={'single_host_origin'}
                 />
             </Box>
+            
         </div>
     )
 }
