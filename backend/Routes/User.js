@@ -80,7 +80,7 @@ UserRouter.post("/login", async (req, res) => {
  */
 UserRouter.post('/signup', async (req, res) => {
     try {
-        const { firstName, lastName, email, password, cpassword } = req.body;
+        const { firstName, lastName, email, password } = req.body;
 
         let { error } = userValidation(req.body);
 
@@ -99,16 +99,8 @@ UserRouter.post('/signup', async (req, res) => {
                 message: 'user already exist'
             });
         }
-        else {
-            if (password !== cpassword) {
-                return res.status(422).send({
-                    success: false,
-                    message: 'password and confirm password not match'
-                });
-            }
-        }
 
-        let user = new User({ firstName, lastName, email, password, cpassword });
+        let user = new User({ firstName, lastName, email, password });
         let result = user.save();
         if (!result) {
             return res.status(400).send({
@@ -124,7 +116,7 @@ UserRouter.post('/signup', async (req, res) => {
 
     } catch (err) {
         console.error("signup Error " + err);
-        return res.status(500).send({ success: false, message: 'internal error', error: err, });
+        return res.status(500).send({ success: false, message: 'internal error', error: JSON.stringify(err), });
     }
 });
 

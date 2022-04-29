@@ -15,10 +15,10 @@ const user_schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    cpassword: {
-        type: String,
-        required: true,
-    },
+    // cpassword: {
+    //     type: String,
+    //     required: true,
+    // },
     email: {
         type: String,
         required: true,
@@ -29,7 +29,7 @@ const user_schema = new mongoose.Schema({
 user_schema.pre('save', async function (next) {
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 7);
-        this.cpassword = await bcrypt.hash(this.cpassword, 7);
+        // this.cpassword = await bcrypt.hash(this.cpassword, 7);
     }
     next();
 });

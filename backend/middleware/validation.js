@@ -16,7 +16,6 @@ const userValidation = (data) => {
         email: Joi.string().email().min(6).required(),
         //    password: Joi.string().min(6).numeric(1).required(),
         password: passwordComplexity(complexityOptions),
-        cpassword: passwordComplexity(complexityOptions),
     })
     return schema.validate(data)
 }
