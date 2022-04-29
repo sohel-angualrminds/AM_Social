@@ -10,6 +10,18 @@ import FormLabel from '@mui/material/FormLabel';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+}));
 
 function EditPage() 
 {
@@ -26,67 +38,82 @@ function EditPage()
 
             <h1>Edit Profile</h1>
 
-            <div>
-                <TextField 
-                    id="outlined-basic" 
-                    label="Name *" 
-                    variant="outlined" 
-                />
+            <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={2}>
 
-                <br />
+                    <Grid item xs={4} sx={{border : '1px solid black'}}>
+                        <div style={{height:'200px',width:'200px',backgroundColor:'skyblue'}}>
+                        </div>
+                    </Grid>
 
-                <TextareaAutosize
-                    aria-label="minimum height"
-                    minRows={3}
-                    placeholder="Minimum 3 rows"
-                    style={{ width: 230 }}
-                />
+                    <Grid item xs={8} sx={{border : '1px solid black'}}>
+                        <div>
+                            <TextField 
+                                id="outlined-basic" 
+                                label="Name *" 
+                                variant="outlined" 
+                            />
 
-                <br />
+                            <br />
 
-                <FormControl>
-                    <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-                    <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="female"
-                        name="radio-buttons-group"
-                    >
-                        <FormControlLabel value="female" control={<Radio />} label="Female" />
-                        <FormControlLabel value="male" control={<Radio />} label="Male" />
-                        <FormControlLabel value="other" control={<Radio />} label="Other" />
-                    </RadioGroup>
-                </FormControl>
+                            <TextareaAutosize
+                                aria-label="minimum height"
+                                minRows={3}
+                                placeholder="Minimum 3 rows"
+                                style={{ width: 230 }}
+                            />
 
-                <br />
+                            <br />
 
-                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                    <DatePicker
-                        label="Basic example"
-                        value={value}
-                        onChange={(newValue) => {
-                            setValue(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                </LocalizationProvider>
+                            <FormControl>
+                                <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                                <RadioGroup
+                                    aria-labelledby="demo-radio-buttons-group-label"
+                                    defaultValue="female"
+                                    name="radio-buttons-group"
+                                >
+                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                                </RadioGroup>
+                            </FormControl>
 
-                <br />
+                            <br />
 
-                <TextField 
-                    id="outlined-basic" 
-                    label="Email *" 
-                    variant="outlined" 
-                />
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    label="Basic example"
+                                    value={value}
+                                    onChange={(newValue) => {
+                                        setValue(newValue);
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
 
-                <br />
+                            <br />
 
-                <TextField 
-                    id="outlined-basic" 
-                    label="Mobile Number *" 
-                    variant="outlined" 
-                />
+                            <TextField 
+                                id="outlined-basic" 
+                                label="Email *" 
+                                variant="outlined" 
+                            />
 
-            </div>
+                            <br />
+
+                            <TextField 
+                                id="outlined-basic" 
+                                label="Mobile Number *" 
+                                variant="outlined" 
+                            />
+
+                        </div>
+                    </Grid>
+
+                </Grid>
+            </Box>
+
+            
 
         </div>
     )

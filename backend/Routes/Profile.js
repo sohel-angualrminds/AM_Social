@@ -52,10 +52,5 @@ profileRouter.put('/edit', verifyToken, fileUpload, async (req, res) => {
     }
 })
 
-<<<<<<< HEAD
-    
-    
-=======
->>>>>>> f8c6230560d6a7cf7fb624f57aeb7a5ee95e75a9
 
 module.exports = profileRouter;

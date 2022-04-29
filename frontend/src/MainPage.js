@@ -68,7 +68,7 @@ function MainPage()
         <div>
             <HeaderPage />
 
-            <div>
+            <div style={{border:'1px solid black',margin:'10px'}}>
                 <Button variant="outlined" onClick={handleOpen} >+ Add New Post</Button>
 
                 <Modal

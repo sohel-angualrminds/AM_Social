@@ -129,7 +129,7 @@ function SignUpPage()
                 sx={{
                     width: 500,
                     height: 500,
-                    backgroundColor: '',
+                    backgroundColor: 'lavender',
                     '&:hover': {
                     backgroundColor: '',
                     opacity: [0.9, 0.8, 0.7],
