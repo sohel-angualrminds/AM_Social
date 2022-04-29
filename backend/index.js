@@ -17,7 +17,7 @@ const user = require('./Routes/User');
 const profile = require('./Routes/Profile');
 
 app.use('/user', user);
-// app.use('/profile',profile);
+app.use('/profile',profile);
 
 //checks server runs or not
 app.listen(PORT, () => {
