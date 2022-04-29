@@ -31,6 +31,9 @@ const profile_schema = new mongoose.Schema({
         required: true,
         minLength: 13
     },
+    image: {
+        type: String
+    },
     userID: {
         type: String,
         required: true
