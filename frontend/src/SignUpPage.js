@@ -3,14 +3,20 @@ import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import validator from 'validator'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 function SignUpPage() 
 {
+
+    const navigate = useNavigate()
+
     const [userData,setUserData] = React.useState({
         firstName : '',
         lastName : '',
         email : '',
-        password : ''
+        password : '',
+        cpassword : ''
     })
 
     const firstNameHandler = (e) => {
@@ -53,17 +59,28 @@ function SignUpPage()
         })
     }
 
+    const confirmPasswordHandler = (e) => {
+        console.log(e.target.value)
+        setUserData(prev => {
+            return {
+                ...prev,
+                cpassword : e.target.value
+            }
+        })
+    }
+
     const [clickSignUp,setClickSignUp] = React.useState(false)
 
     const [checkEmail,setCheckEmail] = React.useState('')
     const [checkPassword,setCheckPassword] = React.useState('')
+    const [checkConfirmPassword,setCheckConfirmPassword] = React.useState('')
 
     const signUpButtonHandler = () => {
         setClickSignUp(true)
         
         if (validator.isEmail(userData.email)) 
         {
-            setCheckEmail('Valid Email :)')
+            setCheckEmail('')
         } 
         else 
         {
@@ -92,6 +109,28 @@ function SignUpPage()
         {
             setCheckPassword('')
         }
+
+        if(userData.password !== userData.cpassword)
+        {
+            setCheckConfirmPassword('password and confirm password is similar')
+        }
+        else
+        {
+            setCheckConfirmPassword('')
+        }
+
+        console.log(userData)
+
+        // if(userData.firstName ==='' && userData.lastName==='' && userData.email==='' && userData.password ==='' && userData.cpassword !== '')
+        // {
+        //     console.log('Enter proper data');
+        // }
+        // else
+        // {
+            axios.post('/user/signup',userData)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+        // }
     }
 
     return (
@@ -154,7 +193,21 @@ function SignUpPage()
                 <br />
                 <span style={{color:"red"}}>{ checkPassword !== "" && checkPassword }</span>
                 <br />
+                <TextField 
+                    id="filled-basic" 
+                    label="Confirm Password *" 
+                    variant="filled" 
+                    value={userData.cpassword} 
+                    onChange={(e) => confirmPasswordHandler(e)} 
+                    error={ clickSignUp && userData.cpassword === '' ? true : false }
+                    helperText={ clickSignUp && userData.cpassword === '' ? "Enter Password " : ''}
+                />
+                <br />
+                    <span style={{color:"red"}}>{ checkConfirmPassword !== "" && checkConfirmPassword }</span>
+                <br />
                 <Button variant="contained" onClick={ () => signUpButtonHandler() }>Sign Up</Button>
+                <br />
+                <Button variant="contained" onClick={ () => navigate('/')}>Login</Button>
             </Box>
         </div>
   )
