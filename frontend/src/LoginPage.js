@@ -61,8 +61,17 @@ function LoginPage()
         })
         console.log(token)
         axios.post('/user/login',userLoginData)
-        .then(response => console.log(response))
-        .catch(error => console.log(error))
+        .then(response => {
+            console.log(response)
+            console.log(response.data.token);
+            localStorage.setItem('token1',JSON.stringify(response.data.token))
+            const temp = () => navigate('/mainpage')
+            temp()
+        })
+        .catch(error => {
+            console.log(error)
+            console.log('Enter proper data')
+        })
         // navigate('/mainpage')
     }
 
