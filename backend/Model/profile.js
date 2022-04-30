@@ -14,13 +14,7 @@ const profile_schema = new mongoose.Schema({
         required: true,
     },
     date: {
-        type: Date,
-        default: function () {
-            if (!this.date) {
-                return new Date().toISOString().split('T')[0];
-            }
-            return this.date;
-        }
+        type: String,
     },
     email: {
         type: String,
@@ -29,7 +23,6 @@ const profile_schema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        minLength: 13
     },
     image: {
         type: String

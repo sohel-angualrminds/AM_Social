@@ -7,18 +7,24 @@ const post_schema = new mongoose.Schema({
     caption: {
         type: String,
     },
-    likes: [
-        {
-            like: {
-                type: String
-            }
-        }
-    ],
+    likes: {
+        type: Array,
+        default: []
+    },
     comments: [
         {
             comment: {
                 type: String
-            }
+            },
+            firstName: {
+                type: String
+            },
+            lastName: {
+                type: String
+            },
+            commenterID: {
+                type: String
+            },
         }
     ],
     likesCount: {
@@ -28,9 +34,12 @@ const post_schema = new mongoose.Schema({
     commentsCount: {
         type: Number,
         default: 0
+    },
+    userID: {
+        type: String
     }
 });
 
 
-const postmodel = mongoose.Model('POST', post_schema);
+const postmodel = mongoose.model('POST', post_schema);
 module.exports = postmodel;
