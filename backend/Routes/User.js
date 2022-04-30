@@ -134,7 +134,7 @@ UserRouter.post('/signup', async (req, res) => {
     USAGE : for password updae
     URL : http://localhost:7000/user/changepassword/:id
     Method : put
-    FIELDS : 
+    FIELDS :oldPassword password confirmPassword 
  */
 UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
     try {

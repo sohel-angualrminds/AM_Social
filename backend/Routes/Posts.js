@@ -10,6 +10,7 @@ const Post_Model = require('../Model/post');
 //verifying token
 const verifyToken = require('../middleware/verifyToken');
 const provideInfo = require('../middleware/provideInfo');
+const paginatedResults = require('../middleware/pagination');
 //uploading img
 const multer = require('multer');
 
@@ -40,7 +41,6 @@ const uploadPostImg = multer({
     limits: { fileSize: 1024 * 1024 * 5 },
     fileFilter: fileFilter
 })
-
 
 /*
     USAGE : for adding new Post
@@ -90,13 +90,16 @@ post_router.post('/addPost', verifyToken, uploadPostImg.single('image'), async (
 });
 
 /*
-
-
+    USAGE : for getting all posts
+    URL : http://localhost:7000/feed/
+    Method : get
+    FIELDS : 
 */
-post_router.get('/', verifyToken, async (req, res) => {
+post_router.get('/', verifyToken, paginatedResults(Post_Model), async (req, res) => {
     try {
-        let result = await Post_Model.find();
-        return res.status(200).send({ success: true, message: "all posts", data: result })
+        //http://localhost:7000/feed?page=1&limit=14
+        let posts = res.paginatedResults;
+        return res.status(200).send({ success: true, message: "all posts", data: posts })
     } catch (err) {
         console.log("" + err)
         return res.status(500).send({
@@ -108,6 +111,12 @@ post_router.get('/', verifyToken, async (req, res) => {
 })
 
 
+/*
+    USAGE : for getting perticular users posts
+    URL : http://localhost:7000/feed/
+    Method : get
+    FIELDS : 
+*/
 post_router.get('/:id', verifyToken, async (req, res) => {
     try {
         if (req.id == req.params.id) {
@@ -134,6 +143,13 @@ post_router.get('/:id', verifyToken, async (req, res) => {
     }
 })
 
+
+/*
+    USAGE : for putting comments on perticular  post
+    URL : http://localhost:7000/feed/comment/:id
+    Method : put
+    FIELDS : 
+*/
 post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
     try {
 
@@ -190,6 +206,13 @@ post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
         })
     }
 })
+
+/*
+    USAGE : for putting comments on perticular  post
+    URL : http://localhost:7000/feed/like/:id
+    Method : put
+    FIELDS : 
+*/
 
 post_router.put('/like/:id', verifyToken, provideInfo, async (req, res) => {
     try {
