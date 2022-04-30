@@ -10,6 +10,7 @@ const Post_Model = require('../Model/post');
 //verifying token
 const verifyToken = require('../middleware/verifyToken');
 const provideInfo = require('../middleware/provideInfo');
+const paginatedResults = require('../middleware/pagination');
 //uploading img
 const multer = require('multer');
 
@@ -40,7 +41,6 @@ const uploadPostImg = multer({
     limits: { fileSize: 1024 * 1024 * 5 },
     fileFilter: fileFilter
 })
-
 
 /*
     USAGE : for adding new Post
@@ -95,10 +95,11 @@ post_router.post('/addPost', verifyToken, uploadPostImg.single('image'), async (
     Method : get
     FIELDS : 
 */
-post_router.get('/', verifyToken, async (req, res) => {
+post_router.get('/', verifyToken, paginatedResults(Post_Model), async (req, res) => {
     try {
-        let result = await Post_Model.find();
-        return res.status(200).send({ success: true, message: "all posts", data: result })
+        //http://localhost:7000/feed?page=1&limit=14
+        let posts = res.paginatedResults;
+        return res.status(200).send({ success: true, message: "all posts", data: posts })
     } catch (err) {
         console.log("" + err)
         return res.status(500).send({
