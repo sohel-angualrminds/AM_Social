@@ -13,7 +13,7 @@ const PORT = process.env.PORT;
 
 //its neccesory for getting image to user
 app.use("/uploads", express.static('uploads'))
-
+app.use(cors());
 //importing all imp routes
 const user = require('./Routes/User');
 const profile = require('./Routes/Profile');

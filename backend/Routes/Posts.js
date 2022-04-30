@@ -90,8 +90,10 @@ post_router.post('/addPost', verifyToken, uploadPostImg.single('image'), async (
 });
 
 /*
-
-
+    USAGE : for getting all posts
+    URL : http://localhost:7000/feed/
+    Method : get
+    FIELDS : 
 */
 post_router.get('/', verifyToken, async (req, res) => {
     try {
@@ -108,6 +110,12 @@ post_router.get('/', verifyToken, async (req, res) => {
 })
 
 
+/*
+    USAGE : for getting perticular users posts
+    URL : http://localhost:7000/feed/
+    Method : get
+    FIELDS : 
+*/
 post_router.get('/:id', verifyToken, async (req, res) => {
     try {
         if (req.id == req.params.id) {
@@ -134,6 +142,13 @@ post_router.get('/:id', verifyToken, async (req, res) => {
     }
 })
 
+
+/*
+    USAGE : for putting comments on perticular  post
+    URL : http://localhost:7000/feed/comment/:id
+    Method : put
+    FIELDS : 
+*/
 post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
     try {
 
@@ -190,6 +205,13 @@ post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
         })
     }
 })
+
+/*
+    USAGE : for putting comments on perticular  post
+    URL : http://localhost:7000/feed/like/:id
+    Method : put
+    FIELDS : 
+*/
 
 post_router.put('/like/:id', verifyToken, provideInfo, async (req, res) => {
     try {
