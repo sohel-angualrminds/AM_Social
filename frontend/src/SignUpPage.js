@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 
 function SignUpPage() 
 {
-
     const navigate = useNavigate()
 
     const [userData,setUserData] = React.useState({

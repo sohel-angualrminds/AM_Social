@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import ReCAPTCHA from "react-google-recaptcha"
 import axios from 'axios'
 
-
 function LoginPage() 
 {
     const navigate = useNavigate()

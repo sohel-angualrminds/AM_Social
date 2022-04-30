@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
+
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -29,6 +30,72 @@ function EditPage()
     //datePicker
 
     const [value, setValue] = React.useState(null);
+
+    //new userData
+
+    const [newUserData,setNewUserData] = React.useState({
+        name : '',
+        bio : '',
+        gender : '',
+        dateOfBirth : '',
+        email : '',
+        mobile : ''
+    })
+
+    const nameHandler = (e) => {
+        console.log(e.target.value)
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                name : e.target.value
+            }
+        })
+    }
+
+    const bioHandler = (e) => {
+        console.log(e.target.value)
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                bio : e.target.value
+            }
+        })
+    }
+
+    const genderHandler = (e) => {
+        console.log(e.target.value)
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                gender : e.target.value
+            }
+        })
+    }
+
+    // const dobHandler = (e) => {
+    //     console.log
+    // }
+
+    const emailHandler = (e) => {
+        console.log(e.target.value)
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                email : e.target.value
+            }
+        })
+    }
+
+    const mobileHanlder = (e) => {
+        console.log(e.target.value)
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                mobile : e.target.value
+            }
+        })
+    }
+
 
 
 
@@ -52,6 +119,8 @@ function EditPage()
                                 id="outlined-basic" 
                                 label="Name *" 
                                 variant="outlined" 
+                                value = {newUserData.name}
+                                onChange = { (e) => nameHandler(e) }
                             />
 
                             <br />
@@ -59,8 +128,10 @@ function EditPage()
                             <TextareaAutosize
                                 aria-label="minimum height"
                                 minRows={3}
-                                placeholder="Minimum 3 rows"
+                                placeholder="Bio *"
                                 style={{ width: 230 }}
+                                value = {newUserData.bio}
+                                onChange = { (e) => bioHandler(e) }
                             />
 
                             <br />
@@ -69,8 +140,8 @@ function EditPage()
                                 <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
                                 <RadioGroup
                                     aria-labelledby="demo-radio-buttons-group-label"
-                                    defaultValue="female"
                                     name="radio-buttons-group"
+                                    onChange={ (e) => genderHandler(e) }
                                 >
                                     <FormControlLabel value="female" control={<Radio />} label="Female" />
                                     <FormControlLabel value="male" control={<Radio />} label="Male" />
@@ -85,6 +156,19 @@ function EditPage()
                                     label="Basic example"
                                     value={value}
                                     onChange={(newValue) => {
+                                        function convert(str) {
+                                            var date = new Date(str),
+                                              mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                                              day = ("0" + date.getDate()).slice(-2);
+                                            return [day, mnth, date.getFullYear()].join("-");
+                                          }
+                                        console.log(convert(newValue))
+                                        setNewUserData(prev => {
+                                            return {
+                                                ...prev,
+                                                dateOfBirth :convert(newValue)
+                                            }
+                                        })
                                         setValue(newValue);
                                     }}
                                     renderInput={(params) => <TextField {...params} />}
@@ -97,6 +181,8 @@ function EditPage()
                                 id="outlined-basic" 
                                 label="Email *" 
                                 variant="outlined" 
+                                value={ newUserData.email}
+                                onChange = { (e) => emailHandler(e) } 
                             />
 
                             <br />
@@ -105,6 +191,8 @@ function EditPage()
                                 id="outlined-basic" 
                                 label="Mobile Number *" 
                                 variant="outlined" 
+                                value={newUserData.mobile}
+                                onChange = { (e) => mobileHanlder(e) }
                             />
 
                         </div>
