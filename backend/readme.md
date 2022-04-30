@@ -1,4 +1,9 @@
 ****************************************************************************
+we aaded json file of postman download it and import it in your postman if you have any query regarding how to pass payload
+
+****************************************************************************
+
+****************************************************************************
   ****provide header which contains token ****
   headers:{
         authorization:token
