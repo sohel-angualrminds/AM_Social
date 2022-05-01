@@ -17,6 +17,7 @@ function LoginPage()
         email : '',
         password : ''
     })
+    
 
     const emailHandler = (e) => {
         console.log(e.target.value)
