@@ -20,7 +20,7 @@ function LoginPage()
     
 
     const emailHandler = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setLoginData(prev => {
             return {
                 ...prev,
@@ -30,7 +30,7 @@ function LoginPage()
     }
 
     const passwordHandler = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setLoginData(prev => {
             return {
                 ...prev,
@@ -60,7 +60,7 @@ function LoginPage()
             console.log(response)
             console.log(response.data.token);
             localStorage.setItem('token1',JSON.stringify(response.data.token))
-            const temp = () => navigate('/mainpage')
+            const temp = () => navigate('/mainpage',{state : {token : response.data.token}})
             temp()
         })
         .catch(error => {

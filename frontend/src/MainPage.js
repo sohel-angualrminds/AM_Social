@@ -20,6 +20,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import TextareaAutosize from '@mui/material/TextareaAutosize'
 import axios from 'axios'
+import { useLocation } from 'react-router-dom'
 
 const style = {
     position: 'absolute',
@@ -46,6 +47,8 @@ const ExpandMore = styled((props) => {
 
 function MainPage() 
 {
+    const location = useLocation()
+    console.log(location)
 
     const [expanded, setExpanded] = React.useState(false);
 
@@ -63,6 +66,20 @@ function MainPage()
     // const onChange = (e) => {
     //     const file = e.target.files[0]
     // }
+
+    // Get all posts data
+
+    React.useEffect(() => {
+        axios.get('/feed/?page=1&limit=2',{
+            headers: {
+                Authorization: location.state.token
+            }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => console.log(error))
+    },[])
 
     return (
         <div>
