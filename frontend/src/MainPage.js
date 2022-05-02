@@ -108,7 +108,7 @@ function MainPage()
 
     const [newPostData,setNewPostData] = React.useState({
         image : '',
-        caption : ''
+        caption : null
     })
 
     const imageHandler = (e) => {
@@ -116,7 +116,7 @@ function MainPage()
         setNewPostData(prev => {
             return {
                 ...prev,
-                image : e.target.value
+                image : e.target.files[0]
             }
         })
     }
@@ -132,20 +132,25 @@ function MainPage()
     }
 
     const newPostHandler = () => {
-        axios.post('/feed/addPost',{
+
+        const formData = new FormData()
+        formData.append("image", newPostData.image);
+        formData.append("caption", newPostData.caption);
+
+        axios.post('/feed/addPost',formData,{
             headers: {
                 Authorization: location.state.token
             }
-        },newPostData)
+        })
         .then(response => {
             console.log(response)
         })
         .catch(error => console.log(error))
     }
 
-    const likePostHandler = (id) => {
+    const likePostHandler = (id,likesCount) => {
         console.log(id)
-        axios.put(`/feed/like/${id}`,{
+        axios.put(`/feed/like/${id}`,{count : likesCount+1},{
             headers: {
                 Authorization : location.state.token
             }
@@ -207,8 +212,8 @@ function MainPage()
                         <br />
 
                         <input 
-                            type='file' 
-                            value={newPostData.image}
+                            type="file"
+                            // value={newPostData.image}
                             onChange = { (e) => imageHandler(e) }
                         />
 
@@ -246,7 +251,7 @@ function MainPage()
                             </Typography>
                         </CardContent>
                         <CardActions disableSpacing>
-                            <IconButton aria-label="add to favorites"  onClick={() => likePostHandler(postItem._id) }>
+                            <IconButton aria-label="add to favorites"  onClick={() => likePostHandler(postItem._id,postItem.likesCount) }>
                                 <FavoriteIcon />
                             </IconButton>
                             {postItem.likesCount}

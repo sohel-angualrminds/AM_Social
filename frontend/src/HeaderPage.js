@@ -31,9 +31,11 @@ function HeaderPage()
 
     //get token for local storage
 
-    const token1 = localStorage.getItem('token1')
+    const userData = JSON.parse(localStorage.getItem('userData'))
 
-    console.log(token1)
+    console.log(userData)
+
+    
 
     //another
 
@@ -88,10 +90,10 @@ function HeaderPage()
         })
     }
 
-    const changePasswordHandler = (id) => {
-        axios.get(`/user/changepassword/:${id}`,{
+    const changePasswordHandler = () => {
+        axios.put(`/user/changepassword/${userData.userInfo._id}`,{newPasswordData},{
             headers: {
-                Authorization: token1
+                Authorization: userData.token
             }
         })
         .then(response => {
