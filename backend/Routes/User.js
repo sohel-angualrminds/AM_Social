@@ -88,8 +88,6 @@ UserRouter.post("/login", async (req, res) => {
  */
 UserRouter.post('/signup', async (req, res) => {
     try {
-
-
         let { error } = userValidation(req.body);
 
 
@@ -145,16 +143,15 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
                 message: "invalid user !"
             });
         }
-        let userExist = await find({ _id: req.id });
-
+        let userExist = await User.findOne({ _id: req.id });
         if (!userExist) {
             return res.status(404).send({
                 success: false,
                 message: "user not found!"
             });
         }
-
-        const isPasswordMatched = await bcrypt.compare(req.body.oldPassword, userExist.password);
+        const { oldPassword } = req.body;
+        const isPasswordMatched = await bcrypt.compare(oldPassword, userExist.password);
 
         if (!isPasswordMatched) {
             return res.status(422).send({ success: false, message: "wrong old password" })
@@ -180,7 +177,6 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
         } else {
             return res.status(404).send({ success: false, message: "failed to update", payloadFormat: "oldPassword password confirmPassword" });
         }
-
     } catch (err) {
         return res.status(500).send({
             success: false,
