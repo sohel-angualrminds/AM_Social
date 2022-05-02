@@ -187,7 +187,7 @@ post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
             return res.status(201).send({
                 success: true,
                 message: "comment added",
-                comments:result2
+                comments: result2
             })
         }
         else {
@@ -217,23 +217,25 @@ post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
 
 post_router.put('/like/:id', verifyToken, provideInfo, async (req, res) => {
     try {
-        const post = await Post_Model.findById(req.params.id);
+        const post = await Post_Model.findById({ _id: req.params.id });
+
         if (!post.likes.includes(req.id)) {
             await post.updateOne({ $push: { likes: req.id } });
 
-            let s = await Post_Model.findById(req.params.id);
-            let r = await Post_Model.findOneAndUpdate(req.params.id, {
+            let s = await Post_Model.findOne({ _id: req.params.id }); s
+            let r = await Post_Model.findOneAndUpdate({ _id: req.params.id }, {
                 $set: {
                     likesCount: s.likes.length
                 }
             },
                 { new: true }
             )
+
             res.status(200).send({ success: true, message: "The post has been liked", likeCount: r.likesCount });
         } else {
             await post.updateOne({ $pull: { likes: req.id } });
-            let s = await Post_Model.findById(req.params.id);
-            let r = await Post_Model.findOneAndUpdate(req.params.id, {
+            let s = await Post_Model.findOne({ _id: req.params.id });
+            let r = await Post_Model.findOneAndUpdate({ _id: req.params.id }, {
                 $set: {
                     likesCount: s.likes.length
                 }
