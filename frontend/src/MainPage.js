@@ -198,6 +198,8 @@ function MainPage()
         .catch(error => console.log(error))
     }
 
+    console.log(newPostData);
+
     return (
         <div>
             <HeaderPage />

@@ -123,7 +123,7 @@ function EditPage()
         formData.append("email",newUserData.email)
         formData.append("mobileNumber",newUserData.mobileNumber)
 
-        axios.put('/user/edit',formData,{
+        axios.put(`/user/edit/${userData.userInfo._id}`,formData,{
             headers: {
                 Authorization: userData.token
             }
@@ -150,8 +150,8 @@ function EditPage()
                         </div>
                         <br />
                         Add<input type='file' onChange={(e) => imageHandler(e)} />
-                        <Button variant="outlined">Edit</Button>
-                        <Button variant="outlined">Remove</Button>
+                        {/* <Button variant="outlined">Edit</Button>
+                        <Button variant="outlined">Remove</Button> */}
                     </Grid>
 
                     <Grid item xs={8} sx={{border : '1px solid black'}}>
