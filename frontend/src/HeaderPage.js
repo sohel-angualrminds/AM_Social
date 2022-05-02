@@ -92,7 +92,8 @@ function HeaderPage()
 
     const changePasswordHandler = () => {
         console.log(userData.userInfo._id)
-        axios.put(`/user/changepassword/:${userData.userInfo._id}`,newPasswordData,{
+        
+        axios.put(`/user/changepassword/${userData.userInfo._id}`,newPasswordData,{
             headers: {
                 Authorization: userData.token
             }
