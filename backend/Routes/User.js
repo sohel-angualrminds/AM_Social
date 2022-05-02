@@ -145,7 +145,7 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
                 message: "invalid user !"
             });
         }
-        let userExist = awaitfind({ _id: req.id });
+        let userExist = await find({ _id: req.id });
 
         if (!userExist) {
             return res.status(404).send({
