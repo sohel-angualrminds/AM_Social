@@ -92,7 +92,7 @@ function MainPage()
     })
 
     const imageHandler = (e) => {
-        console.log(e.target.value)
+        console.log(e.target.files[0])
         setNewPostData(prev => {
             return {
                 ...prev,
@@ -134,6 +134,15 @@ function MainPage()
             console.log(response)
         })
         .catch(error => console.log(error))
+    }
+
+    //add new comment and handler
+
+    const [newComment,setnewComment] = React.useState('')
+
+    const commentHandler = (e) => {
+        console.log(e.target.value)
+        setnewComment(e.target.value)
     }
 
     return (
@@ -209,6 +218,7 @@ function MainPage()
                             >
                             <ExpandMoreIcon />
                             </ExpandMore>
+                            <Button variant="text">+Comments</Button>
                         </CardActions>
                         <Collapse in={expanded} timeout="auto" unmountOnExit>
                             <CardContent>
