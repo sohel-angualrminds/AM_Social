@@ -18,7 +18,6 @@ function LoginPage()
         password : ''
     })
     
-
     const emailHandler = (e) => {
         // console.log(e.target.value)
         setLoginData(prev => {

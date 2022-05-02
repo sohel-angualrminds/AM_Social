@@ -24,11 +24,22 @@ const style = {
   p: 4,
 };
 
-
 function HeaderPage() 
 {
 
     const navigate = useNavigate()
+
+    //get token for local storage
+
+    const [token1,setToken1] = React.useState('')
+
+    React.useEffect(() => {
+        setToken1(JSON.parse(localStorage.getItem('token')))        
+    },[])
+
+    console.log(token1)
+
+    //another
 
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
@@ -84,7 +95,7 @@ function HeaderPage()
     const changePasswordHandler = () => {
         axios.get('',{
             headers: {
-                Authorization: location.state.token
+                // Authorization: location.state.token
             }
         })
         .then(response => {

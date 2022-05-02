@@ -57,7 +57,6 @@ function SignUpPage()
         })
     }
 
-    
 
     const [clickSignUp,setClickSignUp] = React.useState(false)
 
