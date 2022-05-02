@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 
 function SignUpPage() 
 {
-
     const navigate = useNavigate()
 
     const [userData,setUserData] = React.useState({
@@ -19,7 +18,7 @@ function SignUpPage()
     })
 
     const firstNameHandler = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setUserData(prev => {
             return {
                 ...prev,
@@ -29,7 +28,7 @@ function SignUpPage()
     }
 
     const lastNameHandler = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setUserData(prev => {
             return {
                 ...prev,
@@ -39,7 +38,7 @@ function SignUpPage()
     }
 
     const emailHandler = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setUserData(prev => {
             return {
                 ...prev,
@@ -49,7 +48,7 @@ function SignUpPage()
     }
 
     const passwordHandler = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setUserData(prev => {
             return {
                 ...prev,
@@ -58,7 +57,6 @@ function SignUpPage()
         })
     }
 
-    
 
     const [clickSignUp,setClickSignUp] = React.useState(false)
 

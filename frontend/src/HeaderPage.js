@@ -10,6 +10,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const style = {
   position: 'absolute',
@@ -23,11 +24,22 @@ const style = {
   p: 4,
 };
 
-
 function HeaderPage() 
 {
 
     const navigate = useNavigate()
+
+    //get token for local storage
+
+    const [token1,setToken1] = React.useState('')
+
+    React.useEffect(() => {
+        setToken1(JSON.parse(localStorage.getItem('token')))        
+    },[])
+
+    console.log(token1)
+
+    //another
 
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
@@ -41,6 +53,58 @@ function HeaderPage()
     const [open2, setOpen2] = React.useState(false);
     const handleOpen2 = () => setOpen2(true);
     const handleClose2 = () => setOpen2(false);
+
+    //update password handler
+
+    const [newPasswordData,setNewPasswordData] = React.useState({
+        oldPassword : '',
+        password : '',
+        confirmPassword : ''
+    })
+
+    const oldPasswordHandler = (e) => {
+        console.log(e.target.value) 
+        setNewPasswordData(prev => {
+            return {
+                ...prev,
+                oldPassword : e.target.value
+            }
+        })
+    }
+
+    const passwordHandler = (e) => {
+        console.log(e.target.value) 
+        setNewPasswordData(prev => {
+            return {
+                ...prev,
+               password : e.target.value
+            }
+        })
+    }
+
+    const confirmPasswordHandler = (e) => {
+        console.log(e.target.value) 
+        setNewPasswordData(prev => {
+            return {
+                ...prev,
+                confirmPassword : e.target.value
+            }
+        })
+    }
+
+    const changePasswordHandler = () => {
+        axios.get('',{
+            headers: {
+                // Authorization: location.state.token
+            }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => console.log(error))
+    }
+
+
 
     return (
         <div>
@@ -86,13 +150,31 @@ function HeaderPage()
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                            Change Password
                         </Typography>
-                        <TextField id="outlined-basic" label="Current Password" variant="outlined" />
+                        <TextField 
+                            id="outlined-basic" 
+                            label="Current Password" 
+                            variant="outlined" 
+                            value = {newPasswordData.oldPassword}
+                            onChange = { (e) => oldPasswordHandler(e)}
+                        />
                         <br />
-                        <TextField id="outlined-basic" label="New Password" variant="outlined" />
+                        <TextField 
+                            id="outlined-basic" 
+                            label="New Password" 
+                            variant="outlined" 
+                            value={newPasswordData.password}
+                            onChange = { (e) => passwordHandler(e) }
+                            />
                         <br />
-                        <TextField id="outlined-basic" label="Confirm Password" variant="outlined" />
+                        <TextField 
+                            id="outlined-basic" 
+                            label="Confirm Password" 
+                            variant="outlined" 
+                            value={newPasswordData.confirmPassword}
+                            onChange = { (e) => confirmPasswordHandler(e) }
+                        />
                         <br />
-                        <Button variant="contained">Set New Password</Button>
+                        <Button variant="contained" onClick={ () => changePasswordHandler() } >Set New Password</Button>
                     </Box>
                 </Modal>
             </Box>
