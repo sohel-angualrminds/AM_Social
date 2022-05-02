@@ -139,7 +139,7 @@ UserRouter.post('/signup', async (req, res) => {
 UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
     try {
 
-        if (req.id !== req.params.id) {
+        if (req.id != req.params.id) {
             return res.status(400).send({
                 success: false,
                 message: "invalid user !"
