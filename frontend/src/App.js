@@ -4,7 +4,6 @@ import LoginPage from './LoginPage'
 import MainPage from './MainPage'
 import SignUpPage from './SignUpPage'
 import { BrowserRouter,Routes,Route } from 'react-router-dom'
-import HeaderPage from './HeaderPage'
 
 function App() 
 {
