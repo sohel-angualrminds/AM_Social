@@ -2,25 +2,20 @@ import React from 'react'
 import HeaderPage from './HeaderPage'
 import { styled } from '@mui/material/styles'
 import Card from '@mui/material/Card'
-// import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
-// import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-// import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-// import ShareIcon from '@mui/icons-material/Share'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-// import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import TextareaAutosize from '@mui/material/TextareaAutosize'
 import axios from 'axios'
-import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 
 const style = {
@@ -48,21 +43,16 @@ const ExpandMore = styled((props) => {
 
 function MainPage() 
 {
-    const location = useLocation()
-    // console.log(location)
+    const navigate = useNavigate()
 
+    const userData = JSON.parse(localStorage.getItem('userData'))
+    const token1 = userData.token
     
-
     //Add new post
  
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-
-    // upload new file
-    // const onChange = (e) => {
-    //     const file = e.target.files[0]
-    // }
 
     // Get all posts data
 
@@ -73,7 +63,7 @@ function MainPage()
     React.useEffect(() => {
         axios.get('/feed/',{
             headers: {
-                Authorization: location.state.token
+                Authorization: token1
             }
         })
         .then(response => {
@@ -85,10 +75,24 @@ function MainPage()
         .catch(error => console.log(error))
     },[])
 
+    const [toggle,setToggle] = React.useState(1)
+
+    React.useEffect(() => {
+        axios.get('/feed/',{
+            headers: {
+                Authorization: token1
+            }
+        })
+        .then(response => {
+            console.log(response.data.data.results)
+            const tempArray = Array(response.data.data.results.length).fill(false)
+            setExpanded(tempArray)
+            setAllPostsData(response.data.data.results)
+        })
+        .catch(error => console.log(error))
+    },[toggle])
 
     //expand comment
-
-    
 
     const handleExpandClick = (commentIndex) => {
         const tempArray = expanded.map((item,index) => {
@@ -116,7 +120,7 @@ function MainPage()
         setNewPostData(prev => {
             return {
                 ...prev,
-                image : e.target.value
+                image : e.target.files[0]
             }
         })
     }
@@ -132,26 +136,34 @@ function MainPage()
     }
 
     const newPostHandler = () => {
-        axios.post('/feed/addPost',{
+
+        const formData = new FormData()
+        formData.append("image", newPostData.image);
+        formData.append("caption", newPostData.caption);
+
+        axios.post('/feed/addPost',formData,{
             headers: {
-                Authorization: location.state.token
+                Authorization: token1
             }
-        },newPostData)
+        })
         .then(response => {
             console.log(response)
+            setToggle(prev => prev + 1)
+            navigate('/mainpage')
         })
         .catch(error => console.log(error))
     }
 
-    const likePostHandler = (id) => {
+    const likePostHandler = (id,likesCount) => {
         console.log(id)
-        axios.put(`/feed/like/${id}`,{
+        axios.put(`/feed/like/${id}`,{count : likesCount+1},{
             headers: {
-                Authorization : location.state.token
+                Authorization : token1
             }
         })
         .then(response => {
             console.log(response)
+            setToggle(prev => prev + 1)
         })
         .catch(error => console.log(error))
     }
@@ -176,11 +188,12 @@ function MainPage()
         console.log(newComment)
         axios.put(` /feed/comment/${id}`,{comment:newComment.comment},{
             headers: {
-                Authorization : location.state.token
+                Authorization : token1
             }
         })
         .then(response => {
             console.log(response)
+            setToggle(prev => prev + 1)
         })
         .catch(error => console.log(error))
     }
@@ -207,8 +220,8 @@ function MainPage()
                         <br />
 
                         <input 
-                            type='file' 
-                            value={newPostData.image}
+                            type="file"
+                            // value={newPostData.image}
                             onChange = { (e) => imageHandler(e) }
                         />
 
@@ -246,7 +259,7 @@ function MainPage()
                             </Typography>
                         </CardContent>
                         <CardActions disableSpacing>
-                            <IconButton aria-label="add to favorites"  onClick={() => likePostHandler(postItem._id) }>
+                            <IconButton aria-label="add to favorites"  onClick={() => likePostHandler(postItem._id,postItem.likesCount) }>
                                 <FavoriteIcon />
                             </IconButton>
                             {postItem.likesCount}
