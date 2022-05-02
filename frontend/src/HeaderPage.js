@@ -37,6 +37,8 @@ function HeaderPage()
 
     
 
+    
+
     //another
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -93,7 +95,7 @@ function HeaderPage()
     const changePasswordHandler = () => {
         console.log(userData.userInfo._id)
         
-        axios.put(`/changepassword/${userData.userInfo._id}`,newPasswordData,{
+        axios.put(`/user/changepassword/${userData.userInfo._id}`,newPasswordData,{
             headers: {
                 Authorization: userData.token
             }
@@ -137,7 +139,11 @@ function HeaderPage()
                     }}>
                         Change Password
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    <MenuItem onClick={() => {
+                        handleClose()
+                        localStorage.clear()
+                        navigate('/')
+                    }}>Logout</MenuItem>
                 </Menu>
 
                 <Modal

@@ -123,7 +123,7 @@ function EditPage()
         formData.append("email",newUserData.email)
         formData.append("mobileNumber",newUserData.mobileNumber)
 
-        axios.put(`/user/edit/${userData.userInfo._id}`,formData,{
+        axios.put(`/profile/edit`,formData,{
             headers: {
                 Authorization: userData.token
             }
@@ -146,7 +146,7 @@ function EditPage()
 
                     <Grid item xs={4} sx={{border : '1px solid black'}}>
                         <div style={{height:'200px',width:'200px',marginLeft:'50px',backgroundColor:'skyblue'}}>
-                            <img src={userImg} style={{height:'200px',width:'200px'}} alt='user' />
+                            <img src={newUserData.image==='' ? userImg : newUserData.image} style={{height:'200px',width:'200px'}} alt='user' />
                         </div>
                         <br />
                         Add<input type='file' onChange={(e) => imageHandler(e)} />
