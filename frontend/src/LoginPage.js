@@ -41,7 +41,6 @@ function LoginPage()
     const [clickLogin,setClickLogin] = React.useState(false)
 
   
-
     const responseGoogle = (response) => {
         console.log(response);
     }
@@ -58,7 +57,7 @@ function LoginPage()
         .then(response => {
             console.log(response)
             console.log(response.data.token);
-            localStorage.setItem('token1',JSON.stringify(response.data.token))
+            localStorage.setItem('token1',JSON.stringify(response.data))
             const temp = () => navigate('/mainpage',{state : {token : response.data.token}})
             temp()
         })

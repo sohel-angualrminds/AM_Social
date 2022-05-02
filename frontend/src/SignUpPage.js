@@ -100,7 +100,6 @@ function SignUpPage()
         }
 
         
-
         console.log(userData)
 
         // if(userData.firstName ==='' || userData.lastName==='' || userData.email==='' || userData.password ==='' || userData.cpassword !== '')

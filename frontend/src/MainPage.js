@@ -2,25 +2,26 @@ import React from 'react'
 import HeaderPage from './HeaderPage'
 import { styled } from '@mui/material/styles'
 import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
+// import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import Collapse from '@mui/material/Collapse'
-import Avatar from '@mui/material/Avatar'
+// import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
-import { red } from '@mui/material/colors'
+// import { red } from '@mui/material/colors'
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import ShareIcon from '@mui/icons-material/Share'
+// import ShareIcon from '@mui/icons-material/Share'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
+// import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import TextareaAutosize from '@mui/material/TextareaAutosize'
 import axios from 'axios'
 import { useLocation } from 'react-router-dom'
+import TextField from '@mui/material/TextField'
 
 const style = {
     position: 'absolute',
@@ -48,16 +49,12 @@ const ExpandMore = styled((props) => {
 function MainPage() 
 {
     const location = useLocation()
-    console.log(location)
+    // console.log(location)
 
-    const [expanded, setExpanded] = React.useState(false);
-
-    const handleExpandClick = () => {
-        setExpanded(!expanded);
-    };
+    
 
     //Add new post
-
+ 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -71,6 +68,8 @@ function MainPage()
 
     const [allPostsData,setAllPostsData] = React.useState([])
 
+    const [expanded, setExpanded] = React.useState([]);
+
     React.useEffect(() => {
         axios.get('/feed/',{
             headers: {
@@ -79,10 +78,31 @@ function MainPage()
         })
         .then(response => {
             console.log(response.data.data.results)
+            const tempArray = Array(response.data.data.results.length).fill(false)
+            setExpanded(tempArray)
             setAllPostsData(response.data.data.results)
         })
         .catch(error => console.log(error))
     },[])
+
+
+    //expand comment
+
+    
+
+    const handleExpandClick = (commentIndex) => {
+        const tempArray = expanded.map((item,index) => {
+            if(index === commentIndex)
+            {
+                return !item
+            }
+            else
+            {
+                return item
+            }
+        })
+        setExpanded(tempArray);
+    };
 
     //For Add new post
 
@@ -125,9 +145,9 @@ function MainPage()
 
     const likePostHandler = (id) => {
         console.log(id)
-        axios.post(`/feed/like/:${id}`,{
+        axios.put(`/feed/like/${id}`,{
             headers: {
-                Authorization: location.state.token
+                Authorization : location.state.token
             }
         })
         .then(response => {
@@ -138,11 +158,31 @@ function MainPage()
 
     //add new comment and handler
 
-    const [newComment,setnewComment] = React.useState('')
+    const [newComment,setnewComment] = React.useState({
+        comment : ''
+    })
 
-    const commentHandler = (e) => {
-        console.log(e.target.value)
-        setnewComment(e.target.value)
+    const newCommentHandler = (e) => {
+        // console.log(e.target.value)
+        setnewComment(prev => {
+            return {
+                comment : e.target.value
+            }
+        })
+    }
+
+    const addCommentHandler = (id) => {
+        console.log(id)
+        console.log(newComment)
+        axios.put(` /feed/comment/${id}`,{comment:newComment.comment},{
+            headers: {
+                Authorization : location.state.token
+            }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => console.log(error))
     }
 
     return (
@@ -211,18 +251,29 @@ function MainPage()
                             </IconButton>
                             {postItem.likesCount}
                             <ExpandMore
-                                expand={expanded}
-                                onClick={handleExpandClick}
-                                aria-expanded={expanded}
+                                expand={expanded[postIndex]}
+                                onClick={() => handleExpandClick(postIndex)}
+                                aria-expanded={expanded[postIndex]}
                                 aria-label="show more"
                             >
                             <ExpandMoreIcon />
                             </ExpandMore>
-                            <Button variant="text">+Comments</Button>
                         </CardActions>
-                        <Collapse in={expanded} timeout="auto" unmountOnExit>
+                        <Collapse in={expanded[postIndex]} timeout="auto" unmountOnExit>
                             <CardContent>
+
+                                <TextField 
+                                    id="standard-basic" 
+                                    label="Add New Comment" 
+                                    variant="standard" 
+                                    value={newComment.comment}
+                                    onChange={ (e) => newCommentHandler(e) }
+                                />
+
+                                <Button variant="contained" onClick={() => addCommentHandler(postItem._id)}>+</Button>
+
                                 <Typography paragraph>Comments:</Typography>
+                                
 
                                 {
                                     postItem.comments.map((commentItem,commentIndex) => {

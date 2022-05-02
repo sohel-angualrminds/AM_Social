@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-
+ 
 const style = {
   position: 'absolute',
   top: '50%',
@@ -31,11 +31,7 @@ function HeaderPage()
 
     //get token for local storage
 
-    const [token1,setToken1] = React.useState('')
-
-    React.useEffect(() => {
-        setToken1(JSON.parse(localStorage.getItem('token')))        
-    },[])
+    const token1 = localStorage.getItem('token1')
 
     console.log(token1)
 
@@ -92,10 +88,10 @@ function HeaderPage()
         })
     }
 
-    const changePasswordHandler = () => {
-        axios.get('',{
+    const changePasswordHandler = (id) => {
+        axios.get(`/user/changepassword/:${id}`,{
             headers: {
-                // Authorization: location.state.token
+                Authorization: token1
             }
         })
         .then(response => {
