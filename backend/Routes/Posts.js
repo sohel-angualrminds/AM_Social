@@ -10,7 +10,7 @@ const Post_Model = require('../Model/post');
 //verifying token
 const verifyToken = require('../middleware/verifyToken');
 const provideInfo = require('../middleware/provideInfo');
-const paginatedResults = require('../middleware/pagination');
+const paginatedResults = require('../middleware/Pagination');
 //uploading img
 const multer = require('multer');
 
