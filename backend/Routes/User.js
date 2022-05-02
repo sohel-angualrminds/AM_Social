@@ -165,7 +165,7 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
                 message: "password and confirm password not matched!"
             });
         }
-
+        password = await bcrypt.hash(password, 7);
         let result = await User.findOneAndUpdate({ _id: req.id }, {
             $set: {
                 password: password
