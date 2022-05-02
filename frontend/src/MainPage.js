@@ -108,7 +108,7 @@ function MainPage()
 
     const [newPostData,setNewPostData] = React.useState({
         image : '',
-        caption : null
+        caption : ''
     })
 
     const imageHandler = (e) => {

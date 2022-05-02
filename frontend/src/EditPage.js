@@ -14,6 +14,9 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button'
+import userImg from './user.jpg'
+import axios from 'axios';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -26,6 +29,10 @@ const Item = styled(Paper)(({ theme }) => ({
 function EditPage() 
 {
 
+    //token from local storage
+
+    const userData = JSON.parse(localStorage.getItem('userData'))
+
     //datePicker
 
     const [value, setValue] = React.useState(null);
@@ -33,13 +40,24 @@ function EditPage()
     //new userData
 
     const [newUserData,setNewUserData] = React.useState({
+        image : '',
         name : '',
         bio : '',
         gender : '',
-        dateOfBirth : '',
+        dob : '',
         email : '',
-        mobile : ''
+        mobileNumber : ''
     })
+
+    const imageHandler = (e) => {
+        console.log(e.target.files[0])
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                image : e.target.files[0]
+            }
+        })
+    }
 
     const nameHandler = (e) => {
         console.log(e.target.value)
@@ -71,9 +89,6 @@ function EditPage()
         })
     }
 
-    // const dobHandler = (e) => {
-    //     console.log
-    // }
 
     const emailHandler = (e) => {
         console.log(e.target.value)
@@ -90,12 +105,34 @@ function EditPage()
         setNewUserData(prev => {
             return {
                 ...prev,
-                mobile : e.target.value
+                mobileNumber : e.target.value
             }
         })
     }
 
+    console.log(newUserData);
 
+    const updateHandler = () => {
+
+        const formData = new FormData()
+        formData.append("image",newUserData.image )
+        formData.append("name",newUserData.name)
+        formData.append("bio",newUserData.bio)
+        formData.append("gender",newUserData.gender )
+        formData.append("dob",newUserData.dob)
+        formData.append("email",newUserData.email)
+        formData.append("mobileNumber",newUserData.mobileNumber)
+
+        axios.put('/user/edit',formData,{
+            headers: {
+                Authorization: userData.token
+            }
+        })
+        .then(response => {
+            console.log(response);
+        })
+        .catch(error => console.log(error))
+    }
 
 
     return (
@@ -108,8 +145,13 @@ function EditPage()
                 <Grid container spacing={2}>
 
                     <Grid item xs={4} sx={{border : '1px solid black'}}>
-                        <div style={{height:'200px',width:'200px',backgroundColor:'skyblue'}}>
+                        <div style={{height:'200px',width:'200px',marginLeft:'50px',backgroundColor:'skyblue'}}>
+                            <img src={userImg} style={{height:'200px',width:'200px'}} alt='user' />
                         </div>
+                        <br />
+                        Add<input type='file' onChange={(e) => imageHandler(e)} />
+                        <Button variant="outlined">Edit</Button>
+                        <Button variant="outlined">Remove</Button>
                     </Grid>
 
                     <Grid item xs={8} sx={{border : '1px solid black'}}>
@@ -165,7 +207,7 @@ function EditPage()
                                         setNewUserData(prev => {
                                             return {
                                                 ...prev,
-                                                dateOfBirth :convert(newValue)
+                                                dob :convert(newValue)
                                             }
                                         })
                                         setValue(newValue);
@@ -190,9 +232,13 @@ function EditPage()
                                 id="outlined-basic" 
                                 label="Mobile Number *" 
                                 variant="outlined" 
-                                value={newUserData.mobile}
+                                value={newUserData.mobileNumber}
                                 onChange = { (e) => mobileHanlder(e) }
                             />
+
+                            <br />
+
+                            <Button variant="outlined" onClick={() => updateHandler() }>Update Profile</Button>
 
                         </div>
                     </Grid>
