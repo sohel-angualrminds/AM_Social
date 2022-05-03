@@ -54,7 +54,7 @@ function EditPage()
 
     const [newUserData,setNewUserData] = React.useState({
         image : '',
-        name : loginUserData.firstName,
+        name : '',
         bio :  '',
         gender :  '',
         dob : '',

@@ -224,7 +224,7 @@ function MainPage()
         <div>
             <HeaderPage />
 
-            <div style={{border:'1px solid black',margin:'10px'}}>
+            <div style={{border:'1px solid black',margin:'10px',marginLeft:'100px'}} >
                 <Button variant="outlined" onClick={handleOpen} >+ Add New Post</Button>
 
                 <Modal
@@ -268,7 +268,7 @@ function MainPage()
 
             {
                 allPostsData && allPostsData.map((postItem,postIndex) => {
-                    return <Card sx={{ maxWidth: 300 }} key={postIndex}>
+                    return <Card sx={{ maxWidth: 300,marginTop:'30px',marginLeft:'100px' }} key={postIndex}>
                         <CardMedia
                             component="img"
                             height="194"
