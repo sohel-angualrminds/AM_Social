@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import validator from 'validator'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
- 
+  
 function SignUpPage() 
 {
     const navigate = useNavigate()
@@ -57,7 +57,6 @@ function SignUpPage()
         })
     }
 
-
     const [clickSignUp,setClickSignUp] = React.useState(false)
 
     const [checkEmail,setCheckEmail] = React.useState('')
@@ -99,7 +98,6 @@ function SignUpPage()
             setCheckPassword('')
         }
 
-        
         console.log(userData)
 
         // if(userData.firstName ==='' || userData.lastName==='' || userData.email==='' || userData.password ==='' || userData.cpassword !== '')
