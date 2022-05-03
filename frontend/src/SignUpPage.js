@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import validator from 'validator'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+ 
 function SignUpPage() 
 {
     const navigate = useNavigate()
@@ -111,6 +111,7 @@ function SignUpPage()
             axios.post('/user/signup',userData)
             .then(response => {
                 console.log(response)
+                localStorage.setItem('loginUserData',JSON.stringify(userData))
             })
             .catch(error => {
                 console.log(error)

@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
- 
+  
 const style = {
   position: 'absolute',
   top: '50%',
@@ -35,7 +35,9 @@ function HeaderPage()
 
     console.log(userData)
 
-    
+    const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
+
+    console.log(loginUserData)
 
     
 
@@ -113,8 +115,10 @@ function HeaderPage()
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar >
-                        <Avatar sx={{ marginLeft : '85%' }} onClick={handleClick}>N</Avatar>
-                        <label>Name</label>
+                        <Avatar sx={{ marginLeft : '85%' }} onClick={handleClick}>
+                            {loginUserData.firstName.split(' ')[0][0]}
+                        </Avatar>
+                        <label>{loginUserData.firstName}</label>
                     </Toolbar>
                 </AppBar>
 

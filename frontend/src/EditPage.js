@@ -17,7 +17,14 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button'
 import userImg from './user.jpg'
 import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { useNavigate } from 'react-router-dom';
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+ 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -29,9 +36,15 @@ const Item = styled(Paper)(({ theme }) => ({
 function EditPage() 
 {
 
+    const navigate = useNavigate()
+
     //token from local storage
 
     const userData = JSON.parse(localStorage.getItem('userData'))
+
+    const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
+
+    
 
     //datePicker
 
@@ -41,9 +54,9 @@ function EditPage()
 
     const [newUserData,setNewUserData] = React.useState({
         image : '',
-        name : '',
-        bio : '',
-        gender : '',
+        name : loginUserData.firstName,
+        bio :  '',
+        gender :  '',
         dob : '',
         email : '',
         mobileNumber : ''
@@ -58,6 +71,7 @@ function EditPage()
             }
         })
     }
+
 
     const nameHandler = (e) => {
         console.log(e.target.value)
@@ -130,9 +144,28 @@ function EditPage()
         })
         .then(response => {
             console.log(response);
+            handleClick()
+            // navigate('/mainpage')
         })
         .catch(error => console.log(error))
     }
+
+    //toaster messages
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+
+        setOpen(false);
+    };
+
 
 
     return (
@@ -146,7 +179,7 @@ function EditPage()
 
                     <Grid item xs={4} sx={{border : '1px solid black'}}>
                         <div style={{height:'200px',width:'200px',marginLeft:'50px',backgroundColor:'skyblue'}}>
-                            <img src={newUserData.image==='' ? userImg : newUserData.image} style={{height:'200px',width:'200px'}} alt='user' />
+                            <img src={newUserData.image==='' ? userImg : URL.createObjectURL(newUserData.image)} style={{height:'200px',width:'200px'}} alt='user' />
                         </div>
                         <br />
                         Add<input type='file' onChange={(e) => imageHandler(e)} />
@@ -196,6 +229,7 @@ function EditPage()
                                 <DatePicker
                                     label="Basic example"
                                     value={value}
+                                    
                                     onChange={(newValue) => {
                                         function convert(str) {
                                             var date = new Date(str),
@@ -246,6 +280,11 @@ function EditPage()
                 </Grid>
             </Box>
 
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical : 'top', horizontal :'center' }}>
+                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                    Profile Update Successfully!
+                </Alert>
+            </Snackbar>
             
 
         </div>

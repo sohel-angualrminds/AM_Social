@@ -17,7 +17,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
-
+ 
 const style = {
     position: 'absolute',
     top: '50%',
@@ -59,6 +59,7 @@ function MainPage()
     const [allPostsData,setAllPostsData] = React.useState([])
 
     const [expanded, setExpanded] = React.useState([]);
+    const [like,setLike] = React.useState([])
 
     React.useEffect(() => {
         axios.get('/feed/',{
@@ -70,12 +71,15 @@ function MainPage()
             console.log(response.data.data.results)
             const tempArray = Array(response.data.data.results.length).fill(false)
             setExpanded(tempArray)
+            const tempArray1 = Array(response.data.data.results.length).fill(false)
+            setLike(tempArray1)
             setAllPostsData(response.data.data.results)
         })
         .catch(error => console.log(error))
     },[])
 
     const [toggle,setToggle] = React.useState(1)
+    
 
     React.useEffect(() => {
         axios.get('/feed/',{
@@ -87,6 +91,8 @@ function MainPage()
             console.log(response.data.data.results)
             const tempArray = Array(response.data.data.results.length).fill(false)
             setExpanded(tempArray)
+            // const tempArray1 = Array(response.data.data.results.length).fill(false)
+            // setLike(tempArray1)
             setAllPostsData(response.data.data.results)
         })
         .catch(error => console.log(error))
@@ -154,7 +160,21 @@ function MainPage()
         .catch(error => console.log(error))
     }
 
-    const likePostHandler = (id,likesCount) => {
+    
+
+    const likePostHandler = (id,likesCount,likeIndex) => {
+        const tempArray3 = like.map((item,index) => {
+            if(index === likeIndex)
+            {
+                return !item
+            }
+            else
+            {
+                return item
+            }
+        })
+        setLike(tempArray3)
+
         console.log(id)
         axios.put(`/feed/like/${id}`,{count : likesCount+1},{
             headers: {
@@ -261,7 +281,7 @@ function MainPage()
                             </Typography>
                         </CardContent>
                         <CardActions disableSpacing>
-                            <IconButton aria-label="add to favorites"  onClick={() => likePostHandler(postItem._id,postItem.likesCount) }>
+                            <IconButton aria-label="add to favorites" sx={{color: like[postIndex] ? 'red' : ''}} onClick={() => likePostHandler(postItem._id,postItem.likesCount,postIndex) }>
                                 <FavoriteIcon />
                             </IconButton>
                             {postItem.likesCount}
