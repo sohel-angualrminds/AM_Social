@@ -26,7 +26,7 @@ const style = {
 
 function HeaderPage() 
 {
-
+ 
     const navigate = useNavigate()
 
     //get token for local storage
@@ -113,10 +113,10 @@ function HeaderPage()
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar >
-                        <Avatar sx={{ marginLeft : '85%' }} onClick={handleClick}>
-                            {/* {loginUserData.firstName.split(' ')[0][0]} */}
+                        <Avatar sx={{ marginLeft : '85%' }}  onClick={handleClick} src={loginUserData.image && loginUserData.image} >
+                            { loginUserData && loginUserData.name.split(' ')[0][0]}
                         </Avatar>
-                        {/* <label>{loginUserData.firstName}</label> */}
+                        <label>{loginUserData && loginUserData.name}</label>
                     </Toolbar>
                 </AppBar>
 
@@ -143,7 +143,7 @@ function HeaderPage()
                     </MenuItem>
                     <MenuItem onClick={() => {
                         handleClose()
-                        localStorage.clear()
+                        // localStorage.clear()
                         navigate('/')
                     }}>Logout</MenuItem>
                 </Menu>

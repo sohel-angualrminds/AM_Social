@@ -17,6 +17,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
+import Skeleton from '@mui/material/Skeleton'
   
 const style = {
     position: 'absolute',
@@ -61,6 +62,8 @@ function MainPage()
     const [expanded, setExpanded] = React.useState([]);
     const [like,setLike] = React.useState([])
 
+    const [skeleton,setSkeleton] = React.useState(true)
+
     React.useEffect(() => {
         axios.get('/feed/',{
             headers: {
@@ -74,6 +77,9 @@ function MainPage()
             const tempArray1 = Array(response.data.data.results.length).fill(false)
             setLike(tempArray1)
             setAllPostsData(response.data.data.results)
+            setTimeout(() => {
+                setSkeleton(false)
+            },2000)
         })
         .catch(error => console.log(error))
     },[])
@@ -187,7 +193,7 @@ function MainPage()
         })
         .catch(error => console.log(error))
     }
-
+ 
     //add new comment and handler
 
     const [newComment,setnewComment] = React.useState({
@@ -219,6 +225,12 @@ function MainPage()
     }
 
     console.log(newPostData);
+
+
+    
+
+
+    
 
     return (
         <div>
@@ -267,7 +279,13 @@ function MainPage()
             </div>
 
             {
-                allPostsData && allPostsData.map((postItem,postIndex) => {
+                skeleton 
+                    ? 
+                    allPostsData && allPostsData.map((item) => {
+                        return <Skeleton variant="rectangular" sx={{maxWidth: 300,marginTop:'30px',marginLeft:'100px',height:'300px' }} /> 
+                    })
+                    : 
+                    allPostsData && allPostsData.map((postItem,postIndex) => {
                     return <Card sx={{ maxWidth: 300,marginTop:'30px',marginLeft:'100px' }} key={postIndex}>
                         <CardMedia
                             component="img"

@@ -56,7 +56,7 @@ function SignUpPage()
             }
         })
     }
-
+ 
     const [clickSignUp,setClickSignUp] = React.useState(false)
 
     const [checkEmail,setCheckEmail] = React.useState('')
@@ -109,7 +109,7 @@ function SignUpPage()
             axios.post('/user/signup',userData)
             .then(response => {
                 console.log(response)
-                localStorage.setItem('loginUserData',JSON.stringify(userData))
+                localStorage.setItem('loginUserData',JSON.stringify({name:userData.firstName}))
             })
             .catch(error => {
                 console.log(error)

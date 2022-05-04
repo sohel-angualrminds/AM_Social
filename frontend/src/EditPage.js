@@ -20,7 +20,8 @@ import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
- 
+import Avatar from '@mui/material/Avatar'
+  
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -48,18 +49,18 @@ function EditPage()
 
     //datePicker
 
-    const [value, setValue] = React.useState(null);
+    const [value, setValue] = React.useState(loginUserData.dob ? loginUserData.dob : null);
 
     //new userData
 
     const [newUserData,setNewUserData] = React.useState({
         image : '',
-        name : '',
-        bio :  '',
-        gender :  '',
-        dob : '',
-        email : '',
-        mobileNumber : ''
+        name : loginUserData.name ? loginUserData.name : '',
+        bio : loginUserData.bio ? loginUserData.bio : '',
+        gender : '',
+        dob : loginUserData.dob ? loginUserData.dob : '',
+        email : loginUserData.email ? loginUserData.email : '',
+        mobileNumber : loginUserData.mobileNumber ? loginUserData.mobileNumber : ''
     })
 
     const imageHandler = (e) => {
@@ -68,6 +69,15 @@ function EditPage()
             return {
                 ...prev,
                 image : e.target.files[0]
+            }
+        })
+    }
+
+    const removeImageHandler = () => {
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                image : ''
             }
         })
     }
@@ -145,7 +155,7 @@ function EditPage()
         .then(response => {
             console.log(response);
             handleClick()
-            // navigate('/mainpage')
+            localStorage.setItem('loginUserData',JSON.stringify(newUserData))
         })
         .catch(error => console.log(error))
     }
@@ -178,13 +188,18 @@ function EditPage()
                 <Grid container spacing={2}>
 
                     <Grid item xs={4} sx={{border : '1px solid black'}}>
-                        <div style={{height:'200px',width:'200px',marginLeft:'50px',backgroundColor:'skyblue'}}>
+                        {/* <div style={{height:'200px',width:'200px',marginLeft:'50px',backgroundColor:'skyblue'}}>
                             <img src={newUserData.image==='' ? userImg : URL.createObjectURL(newUserData.image)} style={{height:'200px',width:'200px'}} alt='user' />
-                        </div>
+                        </div> */}
+                        <Avatar
+                            alt="Remy Sharp"
+                            src={newUserData.image==='' ? userImg : URL.createObjectURL(newUserData.image)}
+                            sx={{ width: 200, height: 200,marginLeft:'50px'}}
+                        />
                         <br />
-                        Add<input type='file' onChange={(e) => imageHandler(e)} />
-                        {/* <Button variant="outlined">Edit</Button>
-                        <Button variant="outlined">Remove</Button> */}
+                        <label>Add</label><input type='file' onChange={(e) => imageHandler(e)} />
+                        <label>Edit</label><input type='file' onChange={(e) => imageHandler(e)} />
+                        <Button variant="outlined" onChange={() => removeImageHandler()} >Remove</Button>
                     </Grid>
 
                     <Grid item xs={8} sx={{border : '1px solid black'}}>
@@ -215,6 +230,7 @@ function EditPage()
                                 <RadioGroup
                                     aria-labelledby="demo-radio-buttons-group-label"
                                     name="radio-buttons-group"
+                                    defaultValue={loginUserData.gender}
                                     onChange={ (e) => genderHandler(e) }
                                 >
                                     <FormControlLabel value="female" control={<Radio />} label="Female" />
