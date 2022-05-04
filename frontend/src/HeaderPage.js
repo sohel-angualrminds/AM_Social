@@ -115,6 +115,7 @@ function HeaderPage()
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar >
+                        {/* <h5>AM Social feed</h5> */}
                         <Avatar sx={{ marginLeft : '85%' }}  onClick={handleClick} src={loginUserData.image && loginUserData.image} >
                             {loginUserData && loginUserData.name.split(' ')[0][0]}
                         </Avatar>

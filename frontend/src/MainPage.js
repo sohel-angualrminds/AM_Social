@@ -224,13 +224,7 @@ function MainPage()
         .catch(error => console.log(error))
     }
 
-    // console.log(newPostData);
-
-
-    
-
-
-    
+    // console.log(newPostData);    
 
     return (
         <div>
