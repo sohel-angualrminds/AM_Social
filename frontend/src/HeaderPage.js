@@ -33,11 +33,11 @@ function HeaderPage()
 
     const userData = JSON.parse(localStorage.getItem('userData'))
 
-    console.log(userData)
+    // console.log(userData)
 
     const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
 
-    console.log(loginUserData)
+    // console.log(loginUserData)
 
     
 
@@ -104,6 +104,8 @@ function HeaderPage()
         })
         .then(response => {
             console.log(response)
+            alert('password change successfully')
+            navigate('/mainpage')
         })
         .catch(error => console.log(error))
     }
@@ -114,7 +116,7 @@ function HeaderPage()
                 <AppBar position="static">
                     <Toolbar >
                         <Avatar sx={{ marginLeft : '85%' }}  onClick={handleClick} src={loginUserData.image && loginUserData.image} >
-                            { loginUserData && loginUserData.name.split(' ')[0][0]}
+                            {loginUserData && loginUserData.name.split(' ')[0][0]}
                         </Avatar>
                         <label>{loginUserData && loginUserData.name}</label>
                     </Toolbar>
@@ -162,6 +164,7 @@ function HeaderPage()
                             id="outlined-basic" 
                             label="Current Password" 
                             variant="outlined" 
+                            sx={{marginTop:'10px'}}
                             value = {newPasswordData.oldPassword}
                             onChange = { (e) => oldPasswordHandler(e)}
                         />
@@ -170,6 +173,7 @@ function HeaderPage()
                             id="outlined-basic" 
                             label="New Password" 
                             variant="outlined" 
+                            sx={{marginTop:'10px'}}
                             value={newPasswordData.password}
                             onChange = { (e) => passwordHandler(e) }
                             />
@@ -178,11 +182,12 @@ function HeaderPage()
                             id="outlined-basic" 
                             label="Confirm Password" 
                             variant="outlined" 
+                            sx={{marginTop:'10px'}}
                             value={newPasswordData.confirmPassword}
                             onChange = { (e) => confirmPasswordHandler(e) }
                         />
                         <br />
-                        <Button variant="contained" onClick={ () => changePasswordHandler() } >Set New Password</Button>
+                        <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => changePasswordHandler() } >Set New Password</Button>
                     </Box>
                 </Modal>
             </Box>

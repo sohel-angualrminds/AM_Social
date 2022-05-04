@@ -79,7 +79,7 @@ function MainPage()
             setAllPostsData(response.data.data.results)
             setTimeout(() => {
                 setSkeleton(false)
-            },2000)
+            },1000)
         })
         .catch(error => console.log(error))
     },[])
@@ -224,7 +224,7 @@ function MainPage()
         .catch(error => console.log(error))
     }
 
-    console.log(newPostData);
+    // console.log(newPostData);
 
 
     
@@ -236,8 +236,8 @@ function MainPage()
         <div>
             <HeaderPage />
 
-            <div style={{border:'1px solid black',margin:'10px',marginLeft:'100px'}} >
-                <Button variant="outlined" onClick={handleOpen} >+ Add New Post</Button>
+            <div style={{border:'1px solid black',margin:'10px',marginLeft:'100px',marginRight:'100px'}} >
+                <Button variant="contained" onClick={handleOpen} sx={{marginTop:'5px',marginBottom:'5px'}} >+ Add New Post</Button>
 
                 <Modal
                     open={open}
@@ -265,14 +265,14 @@ function MainPage()
                             aria-label="minimum height"
                             minRows={3}
                             placeholder="Caption * "
-                            style={{ width: 200 }}
+                            style={{ width: 200 ,marginTop:'10px'}}
                             value={newPostData.caption}
                             onChange = { (e) => captionHandler(e) }
                         />
 
                         <br />
 
-                        <Button variant="contained" onClick = { () => newPostHandler() } >Add New Posts</Button>
+                        <Button variant="contained" sx={{marginTop:'10px'}} onClick = { () => newPostHandler() } >Add New Posts</Button>
 
                     </Box>
                 </Modal>
@@ -281,8 +281,8 @@ function MainPage()
             {
                 skeleton 
                     ? 
-                    allPostsData && allPostsData.map((item) => {
-                        return <Skeleton variant="rectangular" sx={{maxWidth: 300,marginTop:'30px',marginLeft:'100px',height:'300px' }} /> 
+                    allPostsData && allPostsData.map((item,index) => {
+                        return <Skeleton key={index} variant="rectangular" sx={{maxWidth: 300,marginTop:'30px',marginLeft:'100px',height:'300px' }} /> 
                     })
                     : 
                     allPostsData && allPostsData.map((postItem,postIndex) => {

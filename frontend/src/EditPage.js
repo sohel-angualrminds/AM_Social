@@ -198,99 +198,120 @@ function EditPage()
                         />
                         <br />
                         <label>Add</label><input type='file' onChange={(e) => imageHandler(e)} />
-                        <label>Edit</label><input type='file' onChange={(e) => imageHandler(e)} />
-                        <Button variant="outlined" onChange={() => removeImageHandler()} >Remove</Button>
+                        {/* <label>Edit</label><input type='file' onChange={(e) => imageHandler(e)} /> */}
+                        <Button variant="outlined" sx={{marginTop:'5px'}} onClick={() => removeImageHandler()} >Remove</Button>
                     </Grid>
 
                     <Grid item xs={8} sx={{border : '1px solid black'}}>
                         <div>
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Name *" 
-                                variant="outlined" 
-                                value = {newUserData.name}
-                                onChange = { (e) => nameHandler(e) }
-                            />
 
-                            <br />
 
-                            <TextareaAutosize
-                                aria-label="minimum height"
-                                minRows={3}
-                                placeholder="Bio *"
-                                style={{ width: 230 }}
-                                value = {newUserData.bio}
-                                onChange = { (e) => bioHandler(e) }
-                            />
-
-                            <br />
-
-                            <FormControl>
-                                <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-                                <RadioGroup
-                                    aria-labelledby="demo-radio-buttons-group-label"
-                                    name="radio-buttons-group"
-                                    defaultValue={loginUserData.gender}
-                                    onChange={ (e) => genderHandler(e) }
-                                >
-                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
-                                </RadioGroup>
-                            </FormControl>
-
-                            <br />
-
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DatePicker
-                                    label="Basic example"
-                                    value={value}
-                                    
-                                    onChange={(newValue) => {
-                                        function convert(str) {
-                                            var date = new Date(str),
-                                              mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-                                              day = ("0" + date.getDate()).slice(-2);
-                                            return [day, mnth, date.getFullYear()].join("-");
-                                          }
-                                        console.log(convert(newValue))
-                                        setNewUserData(prev => {
-                                            return {
-                                                ...prev,
-                                                dob :convert(newValue)
-                                            }
-                                        })
-                                        setValue(newValue);
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
+                            <div style={{marginTop : '3px'}}>
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Name *" 
+                                    variant="outlined" 
+                                    value = {newUserData.name}
+                                    onChange = { (e) => nameHandler(e) }
                                 />
-                            </LocalizationProvider>
+                            </div>
 
                             <br />
 
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Email *" 
-                                variant="outlined" 
-                                value={ newUserData.email}
-                                onChange = { (e) => emailHandler(e) } 
-                            />
+                            <div style={{marginTop : '3px'}}>
+                                <TextareaAutosize
+                                    aria-label="minimum height"
+                                    minRows={3}
+                                    placeholder="Bio *"
+                                    style={{ width: 230 }}
+                                    value = {newUserData.bio}
+                                    onChange = { (e) => bioHandler(e) }
+                                />
+                            </div>                            
 
                             <br />
 
-                            <TextField 
-                                id="outlined-basic" 
-                                label="Mobile Number *" 
-                                variant="outlined" 
-                                value={newUserData.mobileNumber}
-                                onChange = { (e) => mobileHanlder(e) }
-                            />
+                            <div style={{marginTop : '3px'}}>
+                                <FormControl>
+                                    <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
+                                    <RadioGroup
+                                        aria-labelledby="demo-radio-buttons-group-label"
+                                        name="radio-buttons-group"
+                                        defaultValue={loginUserData.gender}
+                                        onChange={ (e) => genderHandler(e) }
+                                    >
+                                        <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                        <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                        <FormControlLabel value="other" control={<Radio />} label="Other" />
+                                    </RadioGroup>
+                                </FormControl>
+                            </div>                           
 
                             <br />
 
-                            <Button variant="outlined" onClick={() => updateHandler() }>Update Profile</Button>
+                            <div style={{marginTop : '3px'}}>
+                                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                    <DatePicker
+                                        label="Basic example"
+                                        value={value}
+                                        
+                                        onChange={(newValue) => {
+                                            function convert(str) {
+                                                var date = new Date(str),
+                                                mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+                                                day = ("0" + date.getDate()).slice(-2);
+                                                return [day, mnth, date.getFullYear()].join("-");
+                                            }
+                                            console.log(convert(newValue))
+                                            setNewUserData(prev => {
+                                                return {
+                                                    ...prev,
+                                                    dob :convert(newValue)
+                                                }
+                                            })
+                                            setValue(newValue);
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+                                </LocalizationProvider>
+                            </div>
+
+                            <br />
+
+                            <div style={{marginTop : '3px'}}>
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Email *" 
+                                    variant="outlined" 
+                                    value={ newUserData.email}
+                                    onChange = { (e) => emailHandler(e) } 
+                                />
+                            </div>
+
+                            <br />
+
+                            <div style={{marginTop : '3px'}}>
+                                <TextField 
+                                    id="outlined-basic" 
+                                    label="Mobile Number *" 
+                                    variant="outlined" 
+                                    value={newUserData.mobileNumber}
+                                    onChange = { (e) => mobileHanlder(e) }
+                                />
+                            </div>
+
+                            <br />
+
+                            <div style={{marginTop : '3px'}}>
+                                <Button variant="outlined" onClick={() => updateHandler() }>Update Profile</Button>
+                            </div>
 
                         </div>
+
+                        <div style={{marginTop : '3px',marginBottom : '3px'}}>
+                            <Button variant="outlined" onClick={() => navigate('/mainpage') }>Home</Button>
+                        </div>
+
                     </Grid>
 
                 </Grid>
