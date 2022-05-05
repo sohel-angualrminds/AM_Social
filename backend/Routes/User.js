@@ -65,7 +65,9 @@ UserRouter.post("/login", async (req, res) => {
                     message: "Login Succesfull.",
                     userInfo: {
                         email: userExist.email,
-                        _id: userExist._id
+                        _id: userExist._id,
+                        firstName: userExist.firstName,
+                        lastName: userExist.lastName,
                     },
                     token
                 });
