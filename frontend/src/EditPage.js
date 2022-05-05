@@ -69,7 +69,7 @@ function EditPage()
 
 
     React.useEffect(() => {
-         console.log(myCountryCodesObject);
+        console.log(myCountryCodesObject);
         axios.get(`/Profile/user/${userData.userInfo._id}`,{
             headers: {
                 authorization: userData.token
