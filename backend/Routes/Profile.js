@@ -56,9 +56,8 @@ const postData = async (data) => {
 profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res) => {
     try {
         const { image, name, bio, gender, dob: date, email, mobileNumber } = req.body;
-
         const errorArray = [];
-        if (!name || !gender || !email || !email.includes('@') || !email.includes('.') || email.includes('@.')) {
+        if (!name || !gender || !email || !email.includes('@') || !email.includes('.') || email.includes('@.') || mobileNumber.length === 10) {
             if (!name)
                 errorArray.push('name');
 
@@ -68,6 +67,8 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
             if (!email || !email.includes('@') || !email.includes('.') || email.includes('@.'))
                 errorArray.push('email');
 
+            if (mobileNumber.length === 10)
+                errorArray.push('mobile Number should be in valid form');
 
             return res.status(422).send({
                 success: false,
@@ -94,6 +95,7 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
                 date,
                 email,
                 mobileNumber,
+                countryCode,
                 userID: req.id
             };
             result = await profile.findOneAndUpdate({ userId: req.id }, { $set: newObj });
