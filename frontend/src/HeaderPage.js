@@ -113,10 +113,13 @@ function HeaderPage()
     return (
         <div>
             <Box sx={{ flexGrow: 1 }}>
+                
                 <AppBar position="static">
                     <Toolbar >
-                        {/* <h5>AM Social feed</h5> */}
-                        <Avatar sx={{ marginLeft : '85%' }}  onClick={handleClick} src={loginUserData.image && loginUserData.image} >
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <p>AM Social Feed</p>
+                        </Typography>
+                        <Avatar sx={{ marginLeft : '65%' }}  onClick={handleClick} src={loginUserData.image && loginUserData.image} >
                             {loginUserData && loginUserData.name.split(' ')[0][0]}
                         </Avatar>
                         <label>{loginUserData && loginUserData.name}</label>

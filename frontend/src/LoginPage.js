@@ -62,7 +62,6 @@ function LoginPage()
             console.log(error)
             console.log('Enter proper data')
         })
-        
     }
 
     return (
