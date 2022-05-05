@@ -156,8 +156,17 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
         if (!isPasswordMatched) {
             return res.status(422).send({ success: false, message: "wrong old password" })
         }
-
+        var validatePassword = function (pass) {
+            var re = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$/;
+            return re.test(pass)
+        };
         let { password, confirmPassword } = req.body;
+
+        if (!validatePassword(password))
+            return res.status(422).send({
+                success: false,
+                message: "password must content 1 Special Symbol 1 digit min length 6!"
+            });
 
         if (password !== confirmPassword) {
             return res.status(422).send({
