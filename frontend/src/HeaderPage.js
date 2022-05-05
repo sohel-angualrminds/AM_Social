@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-    
+
 const style = {
     position: 'absolute',
     top: '50%',
@@ -24,9 +24,8 @@ const style = {
     p: 4,
 };
 
-function HeaderPage() 
-{
- 
+function HeaderPage() {
+
     const navigate = useNavigate()
 
     //get token for local storage
@@ -39,28 +38,28 @@ function HeaderPage()
 
     // console.log(loginUserData)
 
-    const [loginUserData,setLoginUserData] = React.useState({
-        image : '',
-        name : ''
+    const [loginUserData, setLoginUserData] = React.useState({
+        image: '',
+        name: ''
     })
 
     React.useEffect(() => {
-        axios.get(`/Profile/user/${userData.userInfo._id}`,{
+        axios.get(`/Profile/user/${userData.userInfo._id}`, {
             headers: {
                 authorization: userData.token
             }
         })
-        .then(response => {
-            console.log(response.data.data)
-            setLoginUserData({
-                image : response.data.data.image,
-                name : response.data.data.name
+            .then(response => {
+                console.log(response.data.data)
+                setLoginUserData({
+                    image: response.data.data.image,
+                    name: response.data.data.name
+                })
             })
-        })
-        .catch(error => {
-            console.log(error)
-        })
-    },[])
+            .catch(error => {
+                console.log(error)
+            })
+    }, [])
 
     //another
 
@@ -79,71 +78,72 @@ function HeaderPage()
 
     //update password handler
 
-    const [newPasswordData,setNewPasswordData] = React.useState({
-        oldPassword : '',
-        password : '',
-        confirmPassword : ''
+    const [newPasswordData, setNewPasswordData] = React.useState({
+        oldPassword: '',
+        password: '',
+        confirmPassword: ''
     })
 
     const oldPasswordHandler = (e) => {
-        console.log(e.target.value) 
+        console.log(e.target.value)
         setNewPasswordData(prev => {
             return {
                 ...prev,
-                oldPassword : e.target.value
+                oldPassword: e.target.value
             }
         })
     }
 
     const passwordHandler = (e) => {
-        console.log(e.target.value) 
+        console.log(e.target.value)
         setNewPasswordData(prev => {
             return {
                 ...prev,
-               password : e.target.value
+                password: e.target.value
             }
         })
     }
 
     const confirmPasswordHandler = (e) => {
-        console.log(e.target.value) 
+        console.log(e.target.value)
         setNewPasswordData(prev => {
             return {
                 ...prev,
-                confirmPassword : e.target.value
+                confirmPassword: e.target.value
             }
         })
     }
 
     const changePasswordHandler = () => {
         console.log(userData.userInfo._id)
-        
-        axios.put(`/user/changepassword/${userData.userInfo._id}`,newPasswordData,{
+
+        axios.put(`/user/changepassword/${userData.userInfo._id}`, newPasswordData, {
             headers: {
                 Authorization: userData.token
             }
         })
-        .then(response => {
-            console.log(response)
-            alert('password change successfully')
-            navigate('/mainpage')
-        })
-        .catch(error => console.log(error))
+            .then(response => {
+                console.log(response)
+                alert('password change successfully')
+                navigate('/mainpage')
+            })
+            .catch(error => console.log(error))
     }
- 
+
     return (
         <div>
             <Box sx={{ flexGrow: 1 }}>
-                
+
                 <AppBar position="static">
                     <Toolbar >
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <p>AM Social Feed</p>
                         </Typography>
-                        <Avatar sx={{ marginLeft : '65%' }}  onClick={handleClick} src={loginUserData.image && loginUserData.image} >
-                            {!loginUserData.image && loginUserData && loginUserData.name.split(' ')[0][0]}
-                        </Avatar>
-                        <label>{loginUserData && loginUserData.name}</label>
+                        <Avatar sx={{ marginLeft: '65%' }} onClick={handleClick} src={loginUserData.image && loginUserData.image} >
+                            {!loginUserData.image && userData.firstName && userData.firstName.split('')[0]}
+                        </Avatar>   
+                        <label>{userData.firstName && userData.firstName}</label>
+                        <label>{userData.lastName && userData.lastName}</label>
                     </Toolbar>
                 </AppBar>
 
@@ -183,39 +183,39 @@ function HeaderPage()
                 >
                     <Box sx={style}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                           Change Password
+                            Change Password
                         </Typography>
-                        <TextField 
-                            id="outlined-basic" 
-                            label="Current Password" 
-                            variant="outlined" 
+                        <TextField
+                            id="outlined-basic"
+                            label="Current Password"
+                            variant="outlined"
                             type='password'
-                            sx={{marginTop:'10px'}}
-                            value = {newPasswordData.oldPassword}
-                            onChange = { (e) => oldPasswordHandler(e)}
+                            sx={{ marginTop: '10px' }}
+                            value={newPasswordData.oldPassword}
+                            onChange={(e) => oldPasswordHandler(e)}
                         />
                         <br />
-                        <TextField 
-                            id="outlined-basic" 
-                            label="New Password" 
-                            variant="outlined" 
+                        <TextField
+                            id="outlined-basic"
+                            label="New Password"
+                            variant="outlined"
                             type='password'
-                            sx={{marginTop:'10px'}}
+                            sx={{ marginTop: '10px' }}
                             value={newPasswordData.password}
-                            onChange = { (e) => passwordHandler(e) }
-                            />
-                        <br />
-                        <TextField 
-                            id="outlined-basic" 
-                            label="Confirm Password" 
-                            variant="outlined" 
-                            type='password'
-                            sx={{marginTop:'10px'}}
-                            value={newPasswordData.confirmPassword}
-                            onChange = { (e) => confirmPasswordHandler(e) }
+                            onChange={(e) => passwordHandler(e)}
                         />
                         <br />
-                        <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => changePasswordHandler() } >Set New Password</Button>
+                        <TextField
+                            id="outlined-basic"
+                            label="Confirm Password"
+                            variant="outlined"
+                            type='password'
+                            sx={{ marginTop: '10px' }}
+                            value={newPasswordData.confirmPassword}
+                            onChange={(e) => confirmPasswordHandler(e)}
+                        />
+                        <br />
+                        <Button variant="contained" sx={{ marginTop: '10px' }} onClick={() => changePasswordHandler()} >Set New Password</Button>
                     </Box>
                 </Modal>
             </Box>
