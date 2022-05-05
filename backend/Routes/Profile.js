@@ -100,7 +100,7 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
             };
             result = await profile.findOneAndUpdate({ userId: req.id }, { $set: newObj });
             let result1 = await users.findOneAndUpdate({ _id: req.id }, { $set: { email: email } })
-
+console.log("if",result1);
             if (result1)
                 return res.status(200).send({ success: true, message: "user update successfully" });
             else
@@ -120,7 +120,7 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
                 };
                 let result = await users.findOneAndUpdate({ _id: req.id }, { $set: { email: email } })
                 let result1 = await postData(newObj)
-
+            
                 if (result1)
                     return res.status(200).send({ success: true, message: "user update successfully" });
                 else
@@ -157,8 +157,9 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
  */
 profileRouter.get('/user/:id', verifyToken, async (req, res) => {
     try {
-        if (req.params.id === req.id) {
-            const result = await profile.findOne({ _id: req.params.id });
+        if (req.params.id == req.id) {
+            const result = await profile.findOne({ userID: req.params.id });
+            console.log(result)
             if (result) {
                 return res.status(200).send({
                     success: true,

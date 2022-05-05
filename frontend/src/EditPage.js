@@ -45,12 +45,9 @@ function EditPage()
 
     // const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
 
+     
+
     
-
-    //datePicker
-
-    const [value, setValue] = React.useState(null);
-
     //new userData
 
     const [newUserData,setNewUserData] = React.useState({
@@ -63,9 +60,49 @@ function EditPage()
         mobileNumber : ''
     })
 
+    const [getRequest,setGetRequest] = React.useState(0)
+
+    //get data
+
+
+    React.useEffect(() => {
+        axios.get(`/Profile/user/${userData.userInfo._id}`,{
+            headers: {
+                authorization: userData.token
+            }
+        })
+        .then(response => {
+            console.log(response)
+            console.log(response.data.data)
+            setGetRequest(1)
+            setNewUserData({
+                image : response.data.data.image,
+                name : response.data.data.name,
+                bio : response.data.data.bio,
+                gender : response.data.data.gender,
+                dob : response.data.data.dob,
+                email : response.data.data.email,
+                mobileNumber : response.data.data.mobileNumber
+            })
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },[])
+
+    //datePicker
+
+    const [value, setValue] = React.useState( getRequest ? newUserData.dob : null);
+
+
+    
+
+    
+
     const imageHandler = (e) => {
         console.log(e.target.files[0])
         setNewUserData(prev => {
+            setGetRequest(0)
             return {
                 ...prev,
                 image : e.target.files[0]
@@ -155,7 +192,8 @@ function EditPage()
         .then(response => {
             console.log(response);
             handleClick()
-            localStorage.setItem('loginUserData',JSON.stringify(newUserData))
+            navigate('/mainpage')
+            // localStorage.setItem('loginUserData',JSON.stringify(newUserData))
         })
         .catch(error => console.log(error))
     }
@@ -193,7 +231,7 @@ function EditPage()
                         </div> */}
                         <Avatar
                             alt="Remy Sharp"
-                            src={newUserData.image==='' ? userImg : URL.createObjectURL(newUserData.image)}
+                            src={newUserData.image==='' ? userImg : getRequest ? newUserData.image :  URL.createObjectURL(newUserData.image)}
                             sx={{ width: 200, height: 200,marginLeft:'50px'}}
                         />
                         <br />
@@ -238,7 +276,7 @@ function EditPage()
                                         aria-labelledby="demo-radio-buttons-group-label"
                                         name="radio-buttons-group"
                                         sx={{display : 'inlineflex'}}
-                                        // defaultValue={}
+                                        defaultValue={ getRequest ? newUserData.gender : null}
                                         onChange={ (e) => genderHandler(e) }
                                     >
                                         <FormControlLabel value="female" control={<Radio />} label="Female" />

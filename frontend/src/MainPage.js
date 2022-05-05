@@ -21,6 +21,13 @@ import Skeleton from '@mui/material/Skeleton'
 import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
    
 const style = {
     position: 'absolute',
@@ -47,6 +54,13 @@ const ExpandMore = styled((props) => {
 
 function MainPage() 
 {
+
+    const [a,setA] = React.useState(2)
+
+    const function1 = () => {
+        setA(prev => prev + 2)
+    }
+
     const navigate = useNavigate()
 
     const userData = JSON.parse(localStorage.getItem('userData'))
@@ -150,6 +164,20 @@ function MainPage()
         })
     }
 
+    const [open2, setOpen2] = React.useState(false);
+
+  const handleClick2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen2(false);
+  };
+
     const newPostHandler = () => {
 
         const formData = new FormData()
@@ -164,12 +192,18 @@ function MainPage()
         .then(response => {
             console.log(response)
             setToggle(prev => prev + 1)
-            navigate('/mainpage')
+            setNewPostData({
+                image : '',
+                caption : ''
+            })
+            handleClick2()        
         })
         .catch(error => console.log(error))
     }
 
-    
+    const goHomePageHandler = () => {
+        handleClose()
+    }    
 
     const likePostHandler = (id,likesCount,likeIndex) => {
         const tempArray3 = like.map((item,index) => {
@@ -271,10 +305,20 @@ function MainPage()
 
                         <Button variant="contained" sx={{marginTop:'10px'}} onClick = { () => newPostHandler() } >Add New Posts</Button>
 
+                        <br />
+
+                        <Button variant="contained" sx={{marginTop:'10px'}} onClick = { () => goHomePageHandler() } >Home</Button>
+
                     </Box>
                 </Modal>
             </div>
 
+            <Snackbar open={open2} autoHideDuration={6000} onClose={handleClose2} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+                <Alert onClose={handleClose2} severity="success" sx={{ width: '100%' }}>
+                Post added!
+                </Alert>
+            </Snackbar>
+ 
             {
                 skeleton 
                     ? 
@@ -283,11 +327,11 @@ function MainPage()
                     })
                     : 
                     allPostsData && allPostsData.map((postItem,postIndex) => {
-                    return <Card sx={{ maxWidth: 300,marginTop:'30px',marginLeft:'100px' }} key={postIndex}>
+                    return <Card sx={{ maxWidth: 300,marginTop:'30px',marginLeft:'40%' }} key={postIndex}>
                         <CardHeader
                             avatar={
                                 <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
-                                    R
+                                    { postItem.userINFO.firstName && postItem.userINFO.firstName.split(' ')[0][0] }
                                 </Avatar>
                             }
                             action={
@@ -295,8 +339,8 @@ function MainPage()
                                     <MoreVertIcon />
                                 </IconButton>
                             }
-                            title="Shrimp and Chorizo Paella"
-                            subheader="September 14, 2016"
+                            title={ postItem.userINFO.firstName &&  postItem.userINFO.firstName }
+                            subheader={ postItem.userINFO.email && postItem.userINFO.email }
                         />
                         <CardMedia
                             component="img"

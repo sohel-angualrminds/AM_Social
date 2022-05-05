@@ -105,7 +105,7 @@ function SignUpPage()
         //     console.log('Enter proper data');
         // }
         // else
-        // {
+        // { 
             axios.post('/user/signup',userData)
             .then(response => {
                 console.log(response)

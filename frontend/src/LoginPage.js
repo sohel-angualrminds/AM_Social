@@ -6,7 +6,7 @@ import { GoogleLogin } from 'react-google-login'
 import { useNavigate } from 'react-router-dom'
 import ReCAPTCHA from "react-google-recaptcha"
 import axios from 'axios'
-   
+    
 function LoginPage() 
 {
     const navigate = useNavigate()
@@ -62,7 +62,6 @@ function LoginPage()
             console.log(error)
             console.log('Enter proper data')
         })
-        
     }
 
     return (
