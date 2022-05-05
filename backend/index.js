@@ -10,7 +10,6 @@ dotenv.config({ path: './config/config.env' });
 const PORT = process.env.PORT;
 //5
 // require('./DB/DB');
-
 const cors = require('cors');
 //its neccesory for getting image to user
 app.use("/uploads", express.static('uploads'))

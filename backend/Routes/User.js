@@ -195,4 +195,33 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
     }
 })
 
+
+
+//Google Login
+router.post("/google-login", async (req, res) => {
+    try {
+        const user = await User.findOne({ email: req.body.email });
+        if (user) {
+            const token = generateTokens(user);
+            res.status(200).send({
+                success: true,
+                message: "Login Succesfull.",
+                userInfo: {
+                    email: userExist.email,
+                    _id: userExist._id
+                },
+                token
+            });
+        } else {
+            return res.status(404).send({
+                success: false,
+                message: 'Invalid Credential...!!!'
+            })
+        }
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+
 module.exports = UserRouter
