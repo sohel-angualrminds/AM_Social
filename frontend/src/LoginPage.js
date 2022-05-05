@@ -72,10 +72,10 @@ function LoginPage(props)
 
         axios.post('/user/login',loginData)
         .then(response => {
-            console.log(response)
-            console.log(response.data.token);
             localStorage.setItem('userData',JSON.stringify(response.data))
+            localStorage.setItem('isLoggendIn', true);
             checkLoggedIn(true);
+
             const temp = () => navigate('/mainpage',{state : {token : response.data.token}})
             temp()
         })
@@ -135,7 +135,7 @@ function LoginPage(props)
                 <Button variant="contained" sx={{marginTop:'10px',marginBottom:'10px'}} onClick={ () => loginHandler()}>Login</Button>
                 <br />
                 <GoogleLogin
-                    clientId="971623344603-0qquan9pcdb9iu7oq9genvpnel77i7oa.apps.googleusercontent.com"
+                    clientId="186822021258-a22h3l16t1vfn0vm2gb4srruekjvrtoi.apps.googleusercontent.com"
                     buttonText="Log in with Google"
                     onSuccess={responseGoogle}
                     onFailure={responseGoogle}
