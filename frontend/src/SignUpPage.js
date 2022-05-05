@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import validator from 'validator'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-  
+   
 function SignUpPage() 
 {
     const navigate = useNavigate()
@@ -109,7 +109,7 @@ function SignUpPage()
             axios.post('/user/signup',userData)
             .then(response => {
                 console.log(response)
-                localStorage.setItem('loginUserData',JSON.stringify({name:userData.firstName}))
+                // localStorage.setItem('loginUserData',JSON.stringify({name:userData.firstName}))
             })
             .catch(error => {
                 console.log(error)
@@ -126,18 +126,20 @@ function SignUpPage()
                     width: 500,
                     height: 500,
                     backgroundColor: 'lavender',
-                    '&:hover': {
-                    backgroundColor: '',
-                    opacity: [0.9, 0.8, 0.7],
-                    },
+                    // '&:hover': {
+                    // backgroundColor: '',
+                    // opacity: [0.9, 0.8, 0.7],
+                    // },
                     marginLeft : '30%',
-                    marginTop: "5%"
+                    marginTop: "5%",
+                    borderRadius : '10px'
                 }}
             >
                 <TextField 
                     id="filled-basic" 
                     label="First Name*" 
                     variant="filled" 
+                    sx={{marginTop:'10px'}}
                     value={userData.firstName} 
                     onChange={(e) => firstNameHandler(e)}
                     error={ clickSignUp && userData.firstName === '' ? true : false } 
@@ -148,6 +150,7 @@ function SignUpPage()
                     id="filled-basic" 
                     label="Last Name *" 
                     variant="filled" 
+                    sx={{marginTop:'10px'}}
                     value={userData.lastName} 
                     onChange={(e) => lastNameHandler(e)} 
                     error={ clickSignUp && userData.lastName === '' ? true : false }
@@ -158,6 +161,7 @@ function SignUpPage()
                     id="filled-basic" 
                     label="Email *" 
                     variant="filled" 
+                    sx={{marginTop:'10px'}}
                     value={userData.email} 
                     onChange={(e) => emailHandler(e)} 
                     error={ clickSignUp && userData.email === '' ? true : false }
@@ -169,7 +173,9 @@ function SignUpPage()
                 <TextField 
                     id="filled-basic" 
                     label="Password *" 
+                    type='password'
                     variant="filled" 
+                    sx={{marginTop:'10px'}}
                     value={userData.password} 
                     onChange={(e) => passwordHandler(e)} 
                     error={ clickSignUp && userData.password === '' ? true : false }
@@ -178,9 +184,9 @@ function SignUpPage()
                 <br />
                 <span style={{color:"red"}}>{ checkPassword !== "" && checkPassword }</span>
                 <br />
-                <Button variant="contained" onClick={ () => signUpButtonHandler() }>Sign Up</Button>
+                <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => signUpButtonHandler() }>Sign Up</Button>
                 <br />
-                <Button variant="contained" onClick={ () => navigate('/')}>Login</Button>
+                <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => navigate('/')}>Login</Button>
             </Box>
         </div>
   )

@@ -21,7 +21,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar'
-  
+   
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -43,24 +43,24 @@ function EditPage()
 
     const userData = JSON.parse(localStorage.getItem('userData'))
 
-    const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
+    // const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
 
     
 
     //datePicker
 
-    const [value, setValue] = React.useState(loginUserData.dob ? loginUserData.dob : null);
+    const [value, setValue] = React.useState(null);
 
     //new userData
 
     const [newUserData,setNewUserData] = React.useState({
         image : '',
-        name : loginUserData.name ? loginUserData.name : '',
-        bio : loginUserData.bio ? loginUserData.bio : '',
+        name : '',
+        bio : '',
         gender : '',
-        dob : loginUserData.dob ? loginUserData.dob : '',
-        email : loginUserData.email ? loginUserData.email : '',
-        mobileNumber : loginUserData.mobileNumber ? loginUserData.mobileNumber : ''
+        dob : '',
+        email : '',
+        mobileNumber : ''
     })
 
     const imageHandler = (e) => {
@@ -237,7 +237,8 @@ function EditPage()
                                     <RadioGroup
                                         aria-labelledby="demo-radio-buttons-group-label"
                                         name="radio-buttons-group"
-                                        defaultValue={loginUserData.gender}
+                                        sx={{display : 'inlineflex'}}
+                                        // defaultValue={}
                                         onChange={ (e) => genderHandler(e) }
                                     >
                                         <FormControlLabel value="female" control={<Radio />} label="Female" />

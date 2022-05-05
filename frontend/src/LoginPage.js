@@ -6,7 +6,7 @@ import { GoogleLogin } from 'react-google-login'
 import { useNavigate } from 'react-router-dom'
 import ReCAPTCHA from "react-google-recaptcha"
 import axios from 'axios'
-  
+   
 function LoginPage() 
 {
     const navigate = useNavigate()
@@ -73,18 +73,20 @@ function LoginPage()
                     width: 500,
                     height: 500,
                     backgroundColor: 'lavender',
-                    '&:hover': {
-                    backgroundColor: '',
-                    opacity: [0.9, 0.8, 0.7],
-                    },
+                    // '&:hover': {
+                    // backgroundColor: '',
+                    // opacity: [0.9, 0.8, 0.7],
+                    // },
                     marginLeft : '30%',
-                    marginTop: "5%"
+                    marginTop: "5%",
+                    borderRadius : '10px'
                 }}
             >
                 <TextField 
                     id="filled-basic" 
                     label="Email*" 
                     variant="filled"
+                    sx={{marginTop:'10px'}}
                     value={loginData.email} 
                     onChange={(e) => emailHandler(e)}
                     error={ clickLogin && loginData.email === "" ? true : false }
@@ -95,6 +97,8 @@ function LoginPage()
                     id="filled-basic" 
                     label="Password*" 
                     variant="filled" 
+                    type="password"
+                    sx={{marginTop:'10px'}}
                     value={loginData.password}
                     onChange={(e) => passwordHandler(e)}
                     error={ clickLogin && loginData.password ===  "" ? true : false }
@@ -107,7 +111,7 @@ function LoginPage()
                     sitekey="6Ld3COIZAAAAAC3A_RbO1waRz6QhrhdObYOk7b_5" 
                 />
                 <br />
-                <Button variant="contained" onClick={ () => loginHandler()}>Login</Button>
+                <Button variant="contained" sx={{marginTop:'10px',marginBottom:'10px'}} onClick={ () => loginHandler()}>Login</Button>
                 <br />
                 <GoogleLogin
                     clientId="971623344603-0qquan9pcdb9iu7oq9genvpnel77i7oa.apps.googleusercontent.com"
@@ -117,7 +121,7 @@ function LoginPage()
                     cookiePolicy={'single_host_origin'}
                 />
                 <br />
-                <Button variant="contained" onClick={ () => navigate('/signuppage')}>SignUp</Button>
+                <Button variant="contained" sx={{marginTop:'10px',marginBottom:'10px'}} onClick={ () => navigate('/signuppage')}>SignUp</Button>
                 
             </Box>
             
