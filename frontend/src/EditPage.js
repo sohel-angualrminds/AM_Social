@@ -64,9 +64,9 @@ function EditPage()
     })
 
     React.useEffect(() => {
-        axios.get(`/user/${userData.userInfo._id}`,{
+        axios.get(`/Profile/user/${userData.userInfo._id}`,{
             headers: {
-                Authorization: userData.token
+                authorization: userData.token
             }
         })
         .then(response => {
