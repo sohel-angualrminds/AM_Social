@@ -147,5 +147,42 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
     }
 });
 
+/*
+    USAGE : for getting perticular profile  info
+    URL : http://localhost:7000/user/id
+    Method : get
+    FIELDS : 
+ */
+profileRouter.get('/user/:id', verifyToken, async (req, res) => {
+    try {
+        if (req.params.id === req.id) {
+            const result = await profile.findOne({ _id: req.params.id });
+            if (result) {
+                return res.status(200).send({
+                    success: true,
+                    message: "user found",
+                    data: result
+                })
+            }
+            else {
+                return res.status(404).send({
+                    success: false,
+                    message: "user not have any profile please provide profile info"
+                });
+            }
+        }
+        else {
+            res.status(401).send({
+                success: false,
+                message: 'Invalid User !!'
+            })
+        }
+    } catch (err) {
+        res.status(500).send({
+            success: false,
+            message: 'internal Error !!'
+        })
+    }
+})
 
 module.exports = profileRouter;

@@ -35,8 +35,8 @@ const post_schema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    userID: {
-        type: String
+    userINFO: {
+        type: Object
     }
 });
 
