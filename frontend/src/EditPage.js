@@ -21,6 +21,9 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar'
+import countryCodes from 'country-codes-list'
+
+const myCountryCodesObject = countryCodes.customList('countryCode', '[{countryCode}] {countryNameEn}: +{countryCallingCode}')
    
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -66,6 +69,7 @@ function EditPage()
 
 
     React.useEffect(() => {
+         console.log(myCountryCodesObject);
         axios.get(`/Profile/user/${userData.userInfo._id}`,{
             headers: {
                 authorization: userData.token
@@ -222,6 +226,8 @@ function EditPage()
 
             <h1>Edit Profile</h1>
 
+           
+
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
 
@@ -276,7 +282,7 @@ function EditPage()
                                         aria-labelledby="demo-radio-buttons-group-label"
                                         name="radio-buttons-group"
                                         sx={{display : 'inlineflex'}}
-                                        defaultValue={ getRequest ? newUserData.gender : null}
+                                        defaultChecked={ getRequest ? newUserData.gender : null}
                                         onChange={ (e) => genderHandler(e) }
                                     >
                                         <FormControlLabel value="female" control={<Radio />} label="Female" />

@@ -5,10 +5,30 @@ import Button from '@mui/material/Button'
 import validator from 'validator'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
    
 function SignUpPage() 
 {
     const navigate = useNavigate()
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+
+        setOpen(false);
+    };
 
     const [userData,setUserData] = React.useState({
         firstName : '',
@@ -100,27 +120,23 @@ function SignUpPage()
 
         console.log(userData)
 
-        // if(userData.firstName ==='' || userData.lastName==='' || userData.email==='' || userData.password ==='' || userData.cpassword !== '')
-        // {
-        //     console.log('Enter proper data');
-        // }
-        // else
-        // { 
-            axios.post('/user/signup',userData)
-            .then(response => {
-                console.log(response)
-                // localStorage.setItem('loginUserData',JSON.stringify({name:userData.firstName}))
-            })
-            .catch(error => {
-                console.log(error)
-                console.log('Enter proper data');
-            })
-        // }
+        
+        axios.post('/user/signup',userData)
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+            console.log('Enter proper data');
+            handleClick()
+        })
     }
 
     return (
         <div>
+
             <h1>Sign Up</h1>
+
             <Box
                 sx={{
                     width: 500,
@@ -135,6 +151,7 @@ function SignUpPage()
                     borderRadius : '10px'
                 }}
             >
+
                 <TextField 
                     id="filled-basic" 
                     label="First Name*" 
@@ -145,7 +162,9 @@ function SignUpPage()
                     error={ clickSignUp && userData.firstName === '' ? true : false } 
                     helperText={ clickSignUp && userData.firstName === '' ? "Enter First Name " : ''}
                 />
+
                 <br />
+
                 <TextField 
                     id="filled-basic" 
                     label="Last Name *" 
@@ -156,7 +175,9 @@ function SignUpPage()
                     error={ clickSignUp && userData.lastName === '' ? true : false }
                     helperText={ clickSignUp && userData.lastName === '' ? "Enter Last Name " : ''}
                 />
+
                 <br />
+
                 <TextField 
                     id="filled-basic" 
                     label="Email *" 
@@ -167,9 +188,13 @@ function SignUpPage()
                     error={ clickSignUp && userData.email === '' ? true : false }
                     helperText={ clickSignUp && userData.email === '' ? "Enter Email " : ''}
                 />
+
                 <br />
+
                 <span style={{color:"red"}} >{ checkEmail !== "" && 'Enter valid Email!' }</span>
+
                 <br />
+
                 <TextField 
                     id="filled-basic" 
                     label="Password *" 
@@ -181,13 +206,27 @@ function SignUpPage()
                     error={ clickSignUp && userData.password === '' ? true : false }
                     helperText={ clickSignUp && userData.password === '' ? "Enter Password " : ''}
                 />
+
                 <br />
+
                 <span style={{color:"red"}}>{ checkPassword !== "" && checkPassword }</span>
+
                 <br />
+
                 <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => signUpButtonHandler() }>Sign Up</Button>
+
                 <br />
+
                 <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => navigate('/')}>Login</Button>
+
             </Box>
+
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    Enter Proper data!
+                </Alert>
+            </Snackbar>
+
         </div>
   )
 }

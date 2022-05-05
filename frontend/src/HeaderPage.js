@@ -170,7 +170,7 @@ function HeaderPage()
                     </MenuItem>
                     <MenuItem onClick={() => {
                         handleClose()
-                        // localStorage.clear()
+                        localStorage.clear()
                         navigate('/')
                     }}>Logout</MenuItem>
                 </Menu>

@@ -6,12 +6,32 @@ import { GoogleLogin } from 'react-google-login'
 import { useNavigate } from 'react-router-dom'
 import ReCAPTCHA from "react-google-recaptcha"
 import axios from 'axios'
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
     
-function LoginPage() 
+function LoginPage(props) 
 {
     const navigate = useNavigate()
-
+    const {checkLoggedIn}=props;
     const recaptchaRef = React.useRef();
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+
+        setOpen(false);
+    };
 
     const [loginData,setLoginData] = React.useState({
         email : '',
@@ -55,12 +75,14 @@ function LoginPage()
             console.log(response)
             console.log(response.data.token);
             localStorage.setItem('userData',JSON.stringify(response.data))
+            checkLoggedIn(true);
             const temp = () => navigate('/mainpage',{state : {token : response.data.token}})
             temp()
         })
         .catch(error => {
             console.log(error)
-            console.log('Enter proper data')
+            checkLoggedIn(false);
+            handleClick()
         })
     }
 
@@ -123,6 +145,12 @@ function LoginPage()
                 <Button variant="contained" sx={{marginTop:'10px',marginBottom:'10px'}} onClick={ () => navigate('/signuppage')}>SignUp</Button>
                 
             </Box>
+
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    Enter Valid Data!
+                </Alert>
+            </Snackbar>
             
         </div>
     )

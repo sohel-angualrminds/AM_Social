@@ -1,14 +1,15 @@
 import { Navigate, Outlet } from "react-router-dom"
-import LoginPage from "./LoginPage"
 
-const useAuth = () => {
-    const user = { loggedIn : false }
+const useAuth = (status) => {
+    const user = { loggedIn : status }
     return user && user.loggedIn
 }
 
-const ProtectedRoutes = () => {
-  const isAuth = useAuth()
+const ProtectedRoutes = (props) => {
+  const isAuth = useAuth(props.isLoggendIn)
   return isAuth ? <Outlet /> : <Navigate to={'/'} />
 }
+
+
 
 export default ProtectedRoutes

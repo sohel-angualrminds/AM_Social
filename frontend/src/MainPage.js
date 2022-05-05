@@ -166,17 +166,31 @@ function MainPage()
 
     const [open2, setOpen2] = React.useState(false);
 
-  const handleClick2 = () => {
-    setOpen2(true);
-  };
+    const handleClick2 = () => {
+        setOpen2(true);
+    };
 
-  const handleClose2 = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    const handleClose2 = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
 
-    setOpen2(false);
-  };
+        setOpen2(false);
+    };
+
+    const [open3, setOpen3] = React.useState(false);
+
+    const handleClick3 = () => {
+        setOpen3(true);
+    };
+
+    const handleClose3 = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+
+        setOpen3(false);
+    };
 
     const newPostHandler = () => {
 
@@ -184,21 +198,32 @@ function MainPage()
         formData.append("image", newPostData.image);
         formData.append("caption", newPostData.caption);
 
-        axios.post('/feed/addPost',formData,{
-            headers: {
-                Authorization: token1
-            }
-        })
-        .then(response => {
-            console.log(response)
-            setToggle(prev => prev + 1)
-            setNewPostData({
-                image : '',
-                caption : ''
+        console.log(newPostData)
+
+        if(newPostData.image==='' || newPostData.caption==='')
+        {
+            handleClick3()
+        }
+        else
+        {
+            axios.post('/feed/addPost',formData,{
+                headers: {
+                    Authorization: token1
+                }
             })
-            handleClick2()        
-        })
-        .catch(error => console.log(error))
+            .then(response => {
+                console.log(response)
+                setToggle(prev => prev + 1)
+                setNewPostData({
+                    image : '',
+                    caption : ''
+                })
+                handleClick2()        
+            })
+            .catch(error => console.log(error))
+        }
+
+        
     }
 
     const goHomePageHandler = () => {
@@ -313,9 +338,15 @@ function MainPage()
                 </Modal>
             </div>
 
+            <Snackbar open={open3} autoHideDuration={6000} onClose={handleClose3} anchorOrigin={{ vertical:'top', horizontal:'center' }} >
+                <Alert onClose={handleClose3} severity="error" sx={{ width: '100%' }} >
+                    Enter all data!
+                </Alert>
+            </Snackbar>
+
             <Snackbar open={open2} autoHideDuration={6000} onClose={handleClose2} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
                 <Alert onClose={handleClose2} severity="success" sx={{ width: '100%' }}>
-                Post added!
+                    Post added!
                 </Alert>
             </Snackbar>
  
