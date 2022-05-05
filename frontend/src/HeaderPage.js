@@ -140,10 +140,10 @@ function HeaderPage() {
                             <p>AM Social Feed</p>
                         </Typography>
                         <Avatar sx={{ marginLeft: '65%' }} onClick={handleClick} src={loginUserData.image && loginUserData.image} >
-                            {!loginUserData.image && userData.firstName && userData.firstName.split('')[0]}
+                            {!loginUserData.image && userData.userInfo.firstName && userData.userInfo.firstName.split('')[0]}
                         </Avatar>   
-                        <label>{userData.firstName && userData.firstName}</label>
-                        <label>{userData.lastName && userData.lastName}</label>
+                        <label>{userData.userInfo.firstName && userData.userInfo.firstName}</label>
+                        <label>{userData.userInfo.lastName && userData.userInfo.lastName}</label>
                     </Toolbar>
                 </AppBar>
 
