@@ -200,7 +200,7 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
 
 
 //Google Login
-router.post("/google-login", async (req, res) => {
+UserRouter.post("/google-login", async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });
         if (user) {
