@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-   
+    
 const style = {
     position: 'absolute',
     top: '50%',
@@ -165,6 +165,7 @@ function HeaderPage()
                             id="outlined-basic" 
                             label="Current Password" 
                             variant="outlined" 
+                            type='password'
                             sx={{marginTop:'10px'}}
                             value = {newPasswordData.oldPassword}
                             onChange = { (e) => oldPasswordHandler(e)}
@@ -174,6 +175,7 @@ function HeaderPage()
                             id="outlined-basic" 
                             label="New Password" 
                             variant="outlined" 
+                            type='password'
                             sx={{marginTop:'10px'}}
                             value={newPasswordData.password}
                             onChange = { (e) => passwordHandler(e) }
@@ -183,6 +185,7 @@ function HeaderPage()
                             id="outlined-basic" 
                             label="Confirm Password" 
                             variant="outlined" 
+                            type='password'
                             sx={{marginTop:'10px'}}
                             value={newPasswordData.confirmPassword}
                             onChange = { (e) => confirmPasswordHandler(e) }

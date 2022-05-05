@@ -18,7 +18,10 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import TextField from '@mui/material/TextField'
 import Skeleton from '@mui/material/Skeleton'
-  
+import CardHeader from '@mui/material/CardHeader'
+import Avatar from '@mui/material/Avatar'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+   
 const style = {
     position: 'absolute',
     top: '50%',
@@ -79,7 +82,7 @@ function MainPage()
             setAllPostsData(response.data.data.results)
             setTimeout(() => {
                 setSkeleton(false)
-            },1000)
+            },250)
         })
         .catch(error => console.log(error))
     },[])
@@ -281,6 +284,20 @@ function MainPage()
                     : 
                     allPostsData && allPostsData.map((postItem,postIndex) => {
                     return <Card sx={{ maxWidth: 300,marginTop:'30px',marginLeft:'100px' }} key={postIndex}>
+                        <CardHeader
+                            avatar={
+                                <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
+                                    R
+                                </Avatar>
+                            }
+                            action={
+                                <IconButton aria-label="settings">
+                                    <MoreVertIcon />
+                                </IconButton>
+                            }
+                            title="Shrimp and Chorizo Paella"
+                            subheader="September 14, 2016"
+                        />
                         <CardMedia
                             component="img"
                             height="194"
