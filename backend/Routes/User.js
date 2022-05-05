@@ -202,26 +202,34 @@ UserRouter.put('/changepassword/:id', verifyToken, async (req, res) => {
 //Google Login
 UserRouter.post("/google-login", async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email });
-        if (user) {
-            const token = generateTokens(user);
-            res.status(200).send({
+        // console.log(req.body.email)
+        const userExist = await User.findOne({ email: req.body.email });
+        if (userExist) {
+            const token = generateTokens(userExist);
+
+            return res.status(200).send({
                 success: true,
                 message: "Login Succesfull.",
                 userInfo: {
                     email: userExist.email,
-                    _id: userExist._id
+                    _id: userExist._id,
+                    firstName: userExist.firstName,
+                    lastName: userExist.lastName,
                 },
                 token
             });
         } else {
             return res.status(404).send({
                 success: false,
-                message: 'Invalid Credential...!!!'
+                message: 'Invalid Credential... please signup!!!'
             })
         }
     } catch (err) {
-        res.status(500).json(err);
+        console.log(err);
+        res.status(500).send({
+            success: false,
+            message: 'internal error !!!'
+        })
     }
 });
 

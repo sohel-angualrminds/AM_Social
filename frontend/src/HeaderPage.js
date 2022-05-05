@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { Stack } from '@mui/material'
 
 const style = {
     position: 'absolute',
@@ -32,7 +33,7 @@ function HeaderPage() {
 
     const userData = JSON.parse(localStorage.getItem('userData'))
 
-    console.log(userData)
+    // console.log(userData)
 
     // const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
 
@@ -139,11 +140,14 @@ function HeaderPage() {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <p>AM Social Feed</p>
                         </Typography>
+
                         <Avatar sx={{ marginLeft: '65%' }} onClick={handleClick} src={loginUserData.image && loginUserData.image} >
                             {!loginUserData.image && userData.userInfo.firstName && userData.userInfo.firstName.split('')[0]}
-                        </Avatar>   
-                        <label>{userData.userInfo.firstName && userData.userInfo.firstName}</label>
-                        <label>{userData.userInfo.lastName && userData.userInfo.lastName}</label>
+                        </Avatar>
+                        <Stack direction={"row"} gap={1}>
+                            <label>{userData.userInfo.firstName && userData.userInfo.firstName}</label>
+                            <label>{userData.userInfo.lastName && userData.userInfo.lastName}</label>
+                        </Stack>
                     </Toolbar>
                 </AppBar>
 
