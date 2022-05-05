@@ -29,7 +29,6 @@ function LoginPage(props)
         if (reason === 'clickaway') {
         return;
         }
-
         setOpen(false);
     };
 
