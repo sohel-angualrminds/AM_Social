@@ -331,7 +331,7 @@ function MainPage()
                         <CardHeader
                             avatar={
                                 <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
-                                    R
+                                    { postItem.userINFO.firstName && postItem.userINFO.firstName.split(' ')[0][0] }
                                 </Avatar>
                             }
                             action={
@@ -339,8 +339,8 @@ function MainPage()
                                     <MoreVertIcon />
                                 </IconButton>
                             }
-                            title="Shrimp and Chorizo Paella"
-                            subheader="September 14, 2016"
+                            title={ postItem.userINFO.firstName &&  postItem.userINFO.firstName }
+                            subheader={ postItem.userINFO.email && postItem.userINFO.email }
                         />
                         <CardMedia
                             component="img"

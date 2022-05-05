@@ -63,6 +63,20 @@ function EditPage()
         mobileNumber : ''
     })
 
+    React.useEffect(() => {
+        axios.get(`/user/${userData.userInfo._id}`,{
+            headers: {
+                Authorization: userData.token
+            }
+        })
+        .then(response => {
+            console.log(response)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },[])
+
     const imageHandler = (e) => {
         console.log(e.target.files[0])
         setNewUserData(prev => {
