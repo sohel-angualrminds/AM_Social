@@ -22,7 +22,7 @@ function paginatedResults(model) {
         }
       }
       try {
-          results.results = await model.find().sort({_id:-1}).limit(limit).skip(startIndex).exec()
+          results.results = await model.find().limit(limit).sort({_id:-1}).skip(startIndex).exec()
         res.paginatedResults = results
         next()
       } catch (e) {

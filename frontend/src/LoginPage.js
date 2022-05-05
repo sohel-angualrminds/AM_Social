@@ -60,12 +60,9 @@ function LoginPage(props) {
 
 
     const responseGoogle = (res) => {
-        // console.log(res.profileObj.email);
         axios.post('/user/google-login', { email: res.profileObj.email }).then(response => {
-            // data.json();
             console.log(response);
             if (response.status == 200) {
-                // console.log(response);
                 localStorage.setItem('userData', JSON.stringify(response.data))
                 localStorage.setItem('isLoggendIn', true);
                 checkLoggedIn(true);
@@ -76,7 +73,6 @@ function LoginPage(props) {
             //here please show error in 
             navigate('/signuppage');
         })
-
     }
 
     const loginHandler = async () => {

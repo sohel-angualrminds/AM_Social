@@ -1,5 +1,6 @@
 import React from 'react'
 import HeaderPage from './HeaderPage'
+import debounce from "lodash.debounce";
 import { styled } from '@mui/material/styles'
 import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
@@ -25,10 +26,10 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
+const limit = 3;
 
-   
 const style = {
     position: 'absolute',
     top: '50%',
@@ -44,19 +45,17 @@ const style = {
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props
     return <IconButton {...other} />
-        })(({ theme, expand }) => ({
-        transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-        marginLeft: 'auto',
-        transition: theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
+})(({ theme, expand }) => ({
+    transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
     }),
 }));
 
-function MainPage() 
-{
+function MainPage() {
 
-    const [a,setA] = React.useState(2)
-
+    const [a, setA] = React.useState(2)
     const function1 = () => {
         setA(prev => prev + 2)
     }
@@ -65,72 +64,87 @@ function MainPage()
 
     const userData = JSON.parse(localStorage.getItem('userData'))
     const token1 = userData.token
-    
+
     //Add new post
- 
+
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     // Get all posts data
 
-    const [allPostsData,setAllPostsData] = React.useState([])
+    const [allPostsData, setAllPostsData] = React.useState([])
 
     const [expanded, setExpanded] = React.useState([]);
-    const [like,setLike] = React.useState([])
+    const [like, setLike] = React.useState([])
 
-    const [skeleton,setSkeleton] = React.useState(true)
+    const [toggle, setToggle] = React.useState(1);
+
+    const [skeleton, setSkeleton] = React.useState(true)
 
     React.useEffect(() => {
-        axios.get('/feed/',{
+        axios.get(`/feed/?page=${toggle}&limit=${limit}`, {
             headers: {
                 Authorization: token1
             }
         })
-        .then(response => {
-            console.log(response.data.data.results)
-            const tempArray = Array(response.data.data.results.length).fill(false)
-            setExpanded(tempArray)
-            const tempArray1 = Array(response.data.data.results.length).fill(false)
-            setLike(tempArray1)
-            setAllPostsData(response.data.data.results)
-            setTimeout(() => {
-                setSkeleton(false)
-            },250)
-        })
-        .catch(error => console.log(error))
-    },[])
+            .then(response => {
+                // console.log(response.data.data.results)
+                const tempArray = Array(response.data.data.results.length).fill(false)
+                setExpanded(tempArray)
+                const tempArray1 = Array(response.data.data.results.length).fill(false)
+                setLike(tempArray1)
+                setAllPostsData(response.data.data.results)
+                setTimeout(() => {
+                    setSkeleton(false)
+                }, 250)
+            })
+            .catch(error => console.log(error))
+    }, [])
 
-    const [toggle,setToggle] = React.useState(1)
-    
+
+
 
     React.useEffect(() => {
-        axios.get('/feed/',{
+        axios.get(`/feed/?page=${toggle}&limit=${limit}`, {
             headers: {
                 Authorization: token1
             }
         })
-        .then(response => {
-            console.log(response.data.data.results)
-            const tempArray = Array(response.data.data.results.length).fill(false)
-            setExpanded(tempArray)
-            // const tempArray1 = Array(response.data.data.results.length).fill(false)
-            // setLike(tempArray1)
-            setAllPostsData(response.data.data.results)
-        })
-        .catch(error => console.log(error))
-    },[toggle])
+            .then(response => {
+                // console.log(response.data.data.results)
+                const tempArray = Array(response.data.data.results.length).fill(false)
+                setExpanded(tempArray)
+                // const tempArray1 = Array(response.data.data.results.length).fill(false)
+                // setLike(tempArray1)
+                if (toggle === 1) {
+                    setAllPostsData(response.data.data.results);
+                } else {
+                    setAllPostsData([...allPostsData, response.data.data.results])
+                }
+            })
+            .catch(error => console.log(error))
+    }, [toggle]);
+
+    window.onscroll = debounce(() => {
+        console.log(toggle);
+        if (
+            window.innerHeight + document.documentElement.scrollTop ===
+            document.documentElement.offsetHeight
+        ) {
+            console.log("sdfnsdkjgskdjbg");
+            setToggle((prev) => prev + 1);
+        }
+    }, 100);
 
     //expand comment
 
     const handleExpandClick = (commentIndex) => {
-        const tempArray = expanded.map((item,index) => {
-            if(index === commentIndex)
-            {
+        const tempArray = expanded.map((item, index) => {
+            if (index === commentIndex) {
                 return !item
             }
-            else
-            {
+            else {
                 return item
             }
         })
@@ -139,9 +153,9 @@ function MainPage()
 
     //For Add new post
 
-    const [newPostData,setNewPostData] = React.useState({
-        image : '',
-        caption : ''
+    const [newPostData, setNewPostData] = React.useState({
+        image: '',
+        caption: ''
     })
 
     const imageHandler = (e) => {
@@ -149,7 +163,7 @@ function MainPage()
         setNewPostData(prev => {
             return {
                 ...prev,
-                image : e.target.files[0]
+                image: e.target.files[0]
             }
         })
     }
@@ -159,7 +173,7 @@ function MainPage()
         setNewPostData(prev => {
             return {
                 ...prev,
-                caption : e.target.value
+                caption: e.target.value
             }
         })
     }
@@ -172,7 +186,7 @@ function MainPage()
 
     const handleClose2 = (event, reason) => {
         if (reason === 'clickaway') {
-        return;
+            return;
         }
 
         setOpen2(false);
@@ -186,7 +200,7 @@ function MainPage()
 
     const handleClose3 = (event, reason) => {
         if (reason === 'clickaway') {
-        return;
+            return;
         }
 
         setOpen3(false);
@@ -200,73 +214,69 @@ function MainPage()
 
         console.log(newPostData)
 
-        if(newPostData.image==='' || newPostData.caption==='')
-        {
+        if (newPostData.image === '' || newPostData.caption === '') {
             handleClick3()
         }
-        else
-        {
-            axios.post('/feed/addPost',formData,{
+        else {
+            axios.post('/feed/addPost', formData, {
                 headers: {
                     Authorization: token1
                 }
             })
-            .then(response => {
-                console.log(response)
-                setToggle(prev => prev + 1)
-                setNewPostData({
-                    image : '',
-                    caption : ''
+                .then(response => {
+                    console.log(response)
+                    setToggle(prev => prev + 1)
+                    setNewPostData({
+                        image: '',
+                        caption: ''
+                    })
+                    handleClick2()
                 })
-                handleClick2()        
-            })
-            .catch(error => console.log(error))
+                .catch(error => console.log(error))
         }
 
-        
+
     }
 
     const goHomePageHandler = () => {
         handleClose()
-    }    
+    }
 
-    const likePostHandler = (id,likesCount,likeIndex) => {
-        const tempArray3 = like.map((item,index) => {
-            if(index === likeIndex)
-            {
+    const likePostHandler = (id, likesCount, likeIndex) => {
+        const tempArray3 = like.map((item, index) => {
+            if (index === likeIndex) {
                 return !item
             }
-            else
-            {
+            else {
                 return item
             }
         })
         setLike(tempArray3)
 
         console.log(id)
-        axios.put(`/feed/like/${id}`,{count : likesCount+1},{
+        axios.put(`/feed/like/${id}`, { count: likesCount + 1 }, {
             headers: {
-                Authorization : token1
+                Authorization: token1
             }
         })
-        .then(response => {
-            console.log(response)
-            setToggle(prev => prev + 1)
-        })
-        .catch(error => console.log(error))
+            .then(response => {
+                console.log(response)
+                setToggle(prev => prev + 1)
+            })
+            .catch(error => console.log(error))
     }
- 
+
     //add new comment and handler
 
-    const [newComment,setnewComment] = React.useState({
-        comment : ''
+    const [newComment, setnewComment] = React.useState({
+        comment: ''
     })
 
     const newCommentHandler = (e) => {
         // console.log(e.target.value)
         setnewComment(prev => {
             return {
-                comment : e.target.value
+                comment: e.target.value
             }
         })
     }
@@ -274,16 +284,16 @@ function MainPage()
     const addCommentHandler = (id) => {
         console.log(id)
         console.log(newComment)
-        axios.put(` /feed/comment/${id}`,{comment:newComment.comment},{
+        axios.put(` /feed/comment/${id}`, { comment: newComment.comment }, {
             headers: {
-                Authorization : token1
+                Authorization: token1
             }
         })
-        .then(response => {
-            console.log(response)
-            setToggle(prev => prev + 1)
-        })
-        .catch(error => console.log(error))
+            .then(response => {
+                console.log(response)
+                setToggle(prev => prev + 1)
+            })
+            .catch(error => console.log(error))
     }
 
     // console.log(newPostData);    
@@ -292,8 +302,8 @@ function MainPage()
         <div>
             <HeaderPage />
 
-            <div style={{border:'1px solid black',margin:'10px',marginLeft:'100px',marginRight:'100px'}} >
-                <Button variant="contained" onClick={handleOpen} sx={{marginTop:'5px',marginBottom:'5px'}} >+ Add New Post</Button>
+            <div style={{ border: '1px solid black', margin: '10px', marginLeft: '100px', marginRight: '100px' }} >
+                <Button variant="contained" onClick={handleOpen} sx={{ marginTop: '5px', marginBottom: '5px' }} >+ Add New Post</Button>
 
                 <Modal
                     open={open}
@@ -309,121 +319,121 @@ function MainPage()
 
                         <br />
 
-                        <input 
+                        <input
                             type="file"
                             // value={newPostData.image}
-                            onChange = { (e) => imageHandler(e) }
+                            onChange={(e) => imageHandler(e)}
                         />
 
                         <br />
-                        
+
                         <TextareaAutosize
                             aria-label="minimum height"
                             minRows={3}
                             placeholder="Caption * "
-                            style={{ width: 200 ,marginTop:'10px'}}
+                            style={{ width: 200, marginTop: '10px' }}
                             value={newPostData.caption}
-                            onChange = { (e) => captionHandler(e) }
+                            onChange={(e) => captionHandler(e)}
                         />
 
                         <br />
 
-                        <Button variant="contained" sx={{marginTop:'10px'}} onClick = { () => newPostHandler() } >Add New Posts</Button>
+                        <Button variant="contained" sx={{ marginTop: '10px' }} onClick={() => newPostHandler()} >Add New Posts</Button>
 
                         <br />
 
-                        <Button variant="contained" sx={{marginTop:'10px'}} onClick = { () => goHomePageHandler() } >Home</Button>
+                        <Button variant="contained" sx={{ marginTop: '10px' }} onClick={() => goHomePageHandler()} >Home</Button>
 
                     </Box>
                 </Modal>
             </div>
 
-            <Snackbar open={open3} autoHideDuration={6000} onClose={handleClose3} anchorOrigin={{ vertical:'top', horizontal:'center' }} >
+            <Snackbar open={open3} autoHideDuration={6000} onClose={handleClose3} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} >
                 <Alert onClose={handleClose3} severity="error" sx={{ width: '100%' }} >
                     Enter all data!
                 </Alert>
             </Snackbar>
 
-            <Snackbar open={open2} autoHideDuration={6000} onClose={handleClose2} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+            <Snackbar open={open2} autoHideDuration={6000} onClose={handleClose2} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleClose2} severity="success" sx={{ width: '100%' }}>
                     Post added!
                 </Alert>
             </Snackbar>
- 
+
             {
-                skeleton 
-                    ? 
-                    allPostsData && allPostsData.map((item,index) => {
-                        return <Skeleton key={index} variant="rectangular" sx={{maxWidth: 300,marginTop:'30px',marginLeft:'100px',height:'300px' }} /> 
+                skeleton
+                    ?
+                    allPostsData && allPostsData.map((item, index) => {
+                        return <Skeleton key={index} variant="rectangular" sx={{ maxWidth: 300, marginTop: '30px', marginLeft: '100px', height: '300px' }} />
                     })
-                    : 
-                    allPostsData && allPostsData.map((postItem,postIndex) => {
-                    return <Card sx={{ maxWidth: 300,marginTop:'30px',marginLeft:'40%' }} key={postIndex}>
-                        <CardHeader
-                            avatar={
-                                <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
-                                    { postItem.userINFO.firstName && postItem.userINFO.firstName.split(' ')[0][0] }
-                                </Avatar>
-                            }
-                            action={
-                                <IconButton aria-label="settings">
-                                    <MoreVertIcon />
-                                </IconButton>
-                            }
-                            title={ postItem.userINFO.firstName &&  postItem.userINFO.firstName }
-                            subheader={ postItem.userINFO.email && postItem.userINFO.email }
-                        />
-                        <CardMedia
-                            component="img"
-                            height="194"
-                            image={postItem.image}
-                            alt="Paella dish"
-                        />
-                        <CardContent>
-                            <Typography variant="body2" color="text.secondary">
-                            {postItem.caption}
-                            </Typography>
-                        </CardContent>
-                        <CardActions disableSpacing>
-                            <IconButton aria-label="add to favorites" sx={{color: like[postIndex] ? 'red' : ''}} onClick={() => likePostHandler(postItem._id,postItem.likesCount,postIndex) }>
-                                <FavoriteIcon />
-                            </IconButton>
-                            {postItem.likesCount}
-                            <ExpandMore
-                                expand={expanded[postIndex]}
-                                onClick={() => handleExpandClick(postIndex)}
-                                aria-expanded={expanded[postIndex]}
-                                aria-label="show more"
-                            >
-                            <ExpandMoreIcon />
-                            </ExpandMore>
-                        </CardActions>
-                        <Collapse in={expanded[postIndex]} timeout="auto" unmountOnExit>
-                            <CardContent>
-
-                                <TextField 
-                                    id="standard-basic" 
-                                    label="Add New Comment" 
-                                    variant="standard" 
-                                    value={newComment.comment}
-                                    onChange={ (e) => newCommentHandler(e) }
-                                />
-
-                                <Button variant="contained" onClick={() => addCommentHandler(postItem._id)}>+</Button>
-
-                                <Typography paragraph>Comments:</Typography>
-                                
-
-                                {
-                                    postItem.comments.map((commentItem,commentIndex) => {
-                                        return <Typography paragraph key={commentIndex} >{commentItem.comment}</Typography>
-                                    })
+                    :
+                    allPostsData && allPostsData.map((postItem, postIndex) => {
+                        return <Card sx={{ maxWidth: 300, marginTop: '30px', marginLeft: '40%' }} key={postIndex}>
+                            <CardHeader
+                                avatar={
+                                    <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
+                                        {postItem.userINFO.firstName && postItem.userINFO.firstName.split(' ')[0][0]}
+                                    </Avatar>
                                 }
-                                
+                                action={
+                                    <IconButton aria-label="settings">
+                                        <MoreVertIcon />
+                                    </IconButton>
+                                }
+                                title={postItem.userINFO.firstName && postItem.userINFO.firstName}
+                                subheader={postItem.userINFO.email && postItem.userINFO.email}
+                            />
+                            <CardMedia
+                                component="img"
+                                height="194"
+                                image={postItem.image}
+                                alt="Paella dish"
+                            />
+                            <CardContent>
+                                <Typography variant="body2" color="text.secondary">
+                                    {postItem.caption}
+                                </Typography>
                             </CardContent>
-                        </Collapse>
-                    </Card>
-                })
+                            <CardActions disableSpacing>
+                                <IconButton aria-label="add to favorites" sx={{ color: like[postIndex] ? 'red' : '' }} onClick={() => likePostHandler(postItem._id, postItem.likesCount, postIndex)}>
+                                    <FavoriteIcon />
+                                </IconButton>
+                                {postItem.likesCount}
+                                <ExpandMore
+                                    expand={expanded[postIndex]}
+                                    onClick={() => handleExpandClick(postIndex)}
+                                    aria-expanded={expanded[postIndex]}
+                                    aria-label="show more"
+                                >
+                                    <ExpandMoreIcon />
+                                </ExpandMore>
+                            </CardActions>
+                            <Collapse in={expanded[postIndex]} timeout="auto" unmountOnExit>
+                                <CardContent>
+
+                                    <TextField
+                                        id="standard-basic"
+                                        label="Add New Comment"
+                                        variant="standard"
+                                        value={newComment.comment}
+                                        onChange={(e) => newCommentHandler(e)}
+                                    />
+
+                                    <Button variant="contained" onClick={() => addCommentHandler(postItem._id)}>+</Button>
+
+                                    <Typography paragraph>Comments:</Typography>
+
+
+                                    {
+                                        postItem.comments.map((commentItem, commentIndex) => {
+                                            return <Typography paragraph key={commentIndex} >{commentItem.comment}</Typography>
+                                        })
+                                    }
+
+                                </CardContent>
+                            </Collapse>
+                        </Card>
+                    })
             }
 
         </div>
