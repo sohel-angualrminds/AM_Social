@@ -49,13 +49,18 @@ const uploadPostImg = multer({
     FIELDS : image,caption
  */
 
-post_router.post('/addPost', verifyToken, uploadPostImg.single('image'), async (req, res) => {
+post_router.post('/addPost', verifyToken, uploadPostImg.single('image'), provideInfo, async (req, res) => {
     try {
         const { image, caption } = req.body;
         let newObj = {
             image: req.file.path,
             caption: caption,
-            userID: req.id,
+            userINFO: {
+                userID: req.id,
+                firstName: req.firstName,
+                lastName: req.lastName,
+                email: req.email
+            },
             comments: [],
             likes: [],
             likesCount: 0,
@@ -75,7 +80,7 @@ post_router.post('/addPost', verifyToken, uploadPostImg.single('image'), async (
         return res.status(201).send({
             success: true,
             message: "post uploaded successfully",
-            data: result
+            data: result,
         });
 
 
@@ -99,7 +104,11 @@ post_router.get('/', verifyToken, paginatedResults(Post_Model), async (req, res)
     try {
         //http://localhost:7000/feed?page=1&limit=14
         let posts = res.paginatedResults;
-        return res.status(200).send({ success: true, message: "all posts", data: posts })
+        return res.status(200).send({
+            success: true,
+            message: "all posts",
+            data: posts
+        })
     } catch (err) {
         console.log("" + err)
         return res.status(500).send({

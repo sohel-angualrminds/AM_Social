@@ -4,6 +4,7 @@ const provideInfo = async (req, res, next) => {
     if (result) {
         req.firstName = result.firstName;
         req.lastName = result.lastName;
+        req.email = result.email;
     } else {
         req.firstname = "annonymus";
         req.lastname = "";

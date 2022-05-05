@@ -1,12 +1,12 @@
 function paginatedResults(model) {
     return async (req, res, next) => {
-      const page = parseInt(req.query.page)
-      const limit = parseInt(req.query.limit)
+      const page = parseInt(req.query.page);
+      const limit = parseInt(req.query.limit);
   
-      const startIndex = (page - 1) * limit
-      const endIndex = page * limit
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
   
-      const results = {}
+      const results = {};
   
       if (endIndex < await model.countDocuments().exec()) {
         results.next = {
@@ -22,7 +22,7 @@ function paginatedResults(model) {
         }
       }
       try {
-        results.results = await model.find().limit(limit).skip(startIndex).exec()
+          results.results = await model.find().sort({_id:-1}).limit(limit).skip(startIndex).exec()
         res.paginatedResults = results
         next()
       } catch (e) {
