@@ -33,13 +33,34 @@ function HeaderPage()
 
     const userData = JSON.parse(localStorage.getItem('userData'))
 
-    // console.log(userData)
+    console.log(userData)
 
-    const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
+    // const loginUserData = JSON.parse(localStorage.getItem('loginUserData'))
 
     // console.log(loginUserData)
 
-    
+    const [loginUserData,setLoginUserData] = React.useState({
+        image : '',
+        name : ''
+    })
+
+    React.useEffect(() => {
+        axios.get(`/Profile/user/${userData.userInfo._id}`,{
+            headers: {
+                authorization: userData.token
+            }
+        })
+        .then(response => {
+            console.log(response.data.data)
+            setLoginUserData({
+                image : response.data.data.image,
+                name : response.data.data.name
+            })
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    },[])
 
     //another
 
@@ -109,7 +130,7 @@ function HeaderPage()
         })
         .catch(error => console.log(error))
     }
-
+ 
     return (
         <div>
             <Box sx={{ flexGrow: 1 }}>
@@ -120,7 +141,7 @@ function HeaderPage()
                             <p>AM Social Feed</p>
                         </Typography>
                         <Avatar sx={{ marginLeft : '65%' }}  onClick={handleClick} src={loginUserData.image && loginUserData.image} >
-                            {loginUserData && loginUserData.name.split(' ')[0][0]}
+                            {!loginUserData.image && loginUserData && loginUserData.name.split(' ')[0][0]}
                         </Avatar>
                         <label>{loginUserData && loginUserData.name}</label>
                     </Toolbar>

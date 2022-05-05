@@ -318,7 +318,7 @@ function MainPage()
                 Post added!
                 </Alert>
             </Snackbar>
-
+ 
             {
                 skeleton 
                     ? 
