@@ -1,51 +1,50 @@
 //express
-const express = require('express');
+const express = require("express");
 const app = express();
 app.use(express.json());
 const profileRouter = express.Router();
-require('../DB/DB');
-const verifyToken = require('../middleware/verifyToken');
-const profile = require('../Model/profile');
-const users = require('../Model/user');
-const multer = require('multer');
-
-
-
+require("../DB/DB");
+const verifyToken = require("../middleware/verifyToken");
+const profile = require("../Model/profile");
+const users = require("../Model/user");
+const multer = require("multer");
 
 //for image storage
 const Storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "./uploads/");
-    },
-    filename: (req, file, cb) => {
-        cb(null, file.fieldname + '_' + Date.now()
-            + (file.originalname))
-    }
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "_" + Date.now() + file.originalname);
+  },
 });
 
 //checking image format and size
 const fileFilter = (req, file, cb) => {
-    if (file.mimetype === "image/jpg" || file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-        cb(null, true);
-    }
-    else {
-        cb(new Error("incorrect file format"), false)
-    }
+  if (
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png"
+  ) {
+    cb(null, true);
+  } else {
+    cb(new Error("incorrect file format"), false);
+  }
 };
 
 //created  object
 const upload = multer({
-    storage: Storage,
-    limits: { fileSize: 1024 * 1024 * 5 },
-    fileFilter: fileFilter
+  storage: Storage,
+  limits: { fileSize: 1024 * 1024 * 5 },
+  fileFilter: fileFilter,
 });
 
 //adding new data
 const postData = async (data) => {
-    const newdata = new profile(data)
-    const result = await newdata.save();
-    return result;
-}
+  const newdata = new profile(data);
+  const result = await newdata.save();
+  return result;
+};
 
 /*
     USAGE : for updating profile
@@ -53,7 +52,11 @@ const postData = async (data) => {
     Method : put
     FIELDS : 
  */
-profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res) => {
+profileRouter.put(
+  "/edit",
+  verifyToken,
+  upload.single("image"),
+  async (req, res) => {
     try {
         const { image, name, bio, gender, dob: date, mobileNumber, countryCode } = req.body;
         const errorArray = [];
@@ -129,7 +132,8 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
             error: error,
         });
     }
-});
+  }
+);
 
 /*
     USAGE : for getting perticular profile  info
@@ -137,37 +141,35 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
     Method : get
     FIELDS : 
  */
-profileRouter.get('/user/:id', verifyToken, async (req, res) => {
-    try {
-        if (req.params.id == req.id) {
-            const result = await profile.findOne({ userID: req.params.id });
-            console.log(result)
-            if (result) {
-                return res.status(200).send({
-                    success: true,
-                    message: "user found",
-                    data: result
-                })
-            }
-            else {
-                return res.status(404).send({
-                    success: false,
-                    message: "user not have any profile please provide profile info"
-                });
-            }
-        }
-        else {
-            res.status(401).send({
-                success: false,
-                message: 'Invalid User !!'
-            })
-        }
-    } catch (err) {
-        res.status(500).send({
-            success: false,
-            message: 'internal Error !!'
-        })
+profileRouter.get("/user/:id", verifyToken, async (req, res) => {
+  try {
+    if (req.params.id == req.id) {
+      const result = await profile.findOne({ userID: req.params.id });
+
+      if (result) {
+        return res.status(200).send({
+          success: true,
+          message: "user found",
+          data: result,
+        });
+      } else {
+        return res.status(404).send({
+          success: false,
+          message: "user not have any profile please provide profile info",
+        });
+      }
+    } else {
+      res.status(401).send({
+        success: false,
+        message: "Invalid User !!",
+      });
     }
-})
+  } catch (err) {
+    res.status(500).send({
+      success: false,
+      message: "internal Error !!",
+    });
+  }
+});
 
 module.exports = profileRouter;
