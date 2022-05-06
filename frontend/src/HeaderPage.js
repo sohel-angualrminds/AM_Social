@@ -96,6 +96,7 @@ function HeaderPage() {
     }
 
     const passwordHandler = (e) => {
+        
         console.log(e.target.value)
         setNewPasswordData(prev => {
             return {
@@ -114,117 +115,201 @@ function HeaderPage() {
             }
         })
     }
+
+    const [passwordCheck,setPasswordCheck] = React.useState('')
+    const [bothPasswordCheck,setBothPassword] = React.useState('')
  
     const changePasswordHandler = () => {
-        console.log(userData.userInfo._id)
+      console.log(userData.userInfo._id);
 
-        axios.put(`/user/changepassword/${userData.userInfo._id}`, newPasswordData, {
-            headers: {
-                Authorization: userData.token
+      var hasNumber = /\d/;
+      function containsSpecialChars(str) {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+        return specialChars.test(str);
+      }
+
+      // if (userData.password.length <= 5) {
+      //   setCheckPassword("Minimum length of password is 6");
+      // } else if (!hasNumber.test(userData.password)) {
+      //   setCheckPassword("Password contain at least 1 Number");
+      // } else if (!containsSpecialChars(userData.password)) {
+      //   setCheckPassword("Password contain at least 1 Symbol");
+      // }
+
+      if(newPasswordData.password.length <= 5)
+      {
+        setPasswordCheck("Minimum length of password is 6");
+      }
+      else if (!hasNumber.test(newPasswordData.password)) 
+      {
+          setPasswordCheck("Password contain at least 1 Number");
+      } 
+      else if (!containsSpecialChars(newPasswordData.password)) {
+        setPasswordCheck("Password contain at least 1 Symbol");
+      } 
+      else if(newPasswordData.password !== newPasswordData.confirmPassword)
+      {
+            setBothPassword('new password and confirm password should be same')
+      }
+      else {
+        axios
+          .put(
+            `/user/changepassword/${userData.userInfo._id}`,
+            newPasswordData,
+            {
+              headers: {
+                Authorization: userData.token,
+              },
             }
-        })
-            .then(response => {
-                console.log(response)
-                alert('password change successfully')
-                navigate('/mainpage')
-            })
-            .catch(error => console.log(error))
+          )
+          .then((response) => {
+            console.log(response);
+            alert("password change successfully");
+            navigate("/mainpage");
+          })
+          .catch((error) => console.log(error));
+      }
+      
+
+      
     }
 
     return (
-        <div>
-            <Box sx={{ flexGrow: 1 }}>
+      <div>
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static">
+            <Toolbar>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <p>AM Social Feed</p>
+              </Typography>
 
-                <AppBar position="static">
-                    <Toolbar >
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <p>AM Social Feed</p>
-                        </Typography>
+              <Avatar
+                sx={{ marginLeft: "65%" }}
+                onClick={handleClick}
+                src={loginUserData.image && loginUserData.image}
+              >
+                {!loginUserData.image &&
+                  userData.userInfo.firstName &&
+                  userData.userInfo.firstName.split("")[0]}
+              </Avatar>
+              <Stack direction={"row"} gap={1}>
+                <label>
+                  {userData.userInfo.firstName && userData.userInfo.firstName}
+                </label>
+                <label>
+                  {userData.userInfo.lastName && userData.userInfo.lastName}
+                </label>
+              </Stack>
+            </Toolbar>
+          </AppBar>
 
-                        <Avatar sx={{ marginLeft: '65%' }} onClick={handleClick} src={loginUserData.image && loginUserData.image} >
-                            {!loginUserData.image && userData.userInfo.firstName && userData.userInfo.firstName.split('')[0]}
-                        </Avatar>
-                        <Stack direction={"row"} gap={1}>
-                            <label>{userData.userInfo.firstName && userData.userInfo.firstName}</label>
-                            <label>{userData.userInfo.lastName && userData.userInfo.lastName}</label>
-                        </Stack>
-                    </Toolbar>
-                </AppBar>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate("/editpage");
+              }}
+            >
+              Edit Profile
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                handleOpen2();
+              }}
+            >
+              Change Password
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                localStorage.clear();
+                navigate("/");
+              }}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
 
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
-                >
-                    <MenuItem onClick={() => {
-                        handleClose()
-                        navigate('/editpage')
-                    }}>
-                        Edit Profile
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                        handleClose()
-                        handleOpen2()
-                    }}>
-                        Change Password
-                    </MenuItem>
-                    <MenuItem onClick={() => {
-                        handleClose()
-                        localStorage.clear()
-                        navigate('/')
-                    }}>Logout</MenuItem>
-                </Menu>
+          <Modal
+            open={open2}
+            onClose={handleClose2}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                Change Password
+              </Typography>
 
-                <Modal
-                    open={open2}
-                    onClose={handleClose2}
-                    aria-labelledby="modal-modal-title"
-                    aria-describedby="modal-modal-description"
-                >
-                    <Box sx={style}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Change Password
-                        </Typography>
-                        <TextField
-                            id="outlined-basic"
-                            label="Current Password"
-                            variant="outlined"
-                            type='password'
-                            sx={{ marginTop: '10px' }}
-                            value={newPasswordData.oldPassword}
-                            onChange={(e) => oldPasswordHandler(e)}
-                        />
-                        <br />
-                        <TextField
-                            id="outlined-basic"
-                            label="New Password"
-                            variant="outlined"
-                            type='password'
-                            sx={{ marginTop: '10px' }}
-                            value={newPasswordData.password}
-                            onChange={(e) => passwordHandler(e)}
-                        />
-                        <br />
-                        <TextField
-                            id="outlined-basic"
-                            label="Confirm Password"
-                            variant="outlined"
-                            type='password'
-                            sx={{ marginTop: '10px' }}
-                            value={newPasswordData.confirmPassword}
-                            onChange={(e) => confirmPasswordHandler(e)}
-                        />
-                        <br />
-                        <Button variant="contained" sx={{ marginTop: '10px' }} onClick={() => changePasswordHandler()} >Set New Password</Button>
-                    </Box>
-                </Modal>
+              <TextField
+                id="outlined-basic"
+                label="Current Password"
+                variant="outlined"
+                type="password"
+                sx={{ marginTop: "10px" }}
+                value={newPasswordData.oldPassword}
+                onChange={(e) => oldPasswordHandler(e)}
+              />
+
+              <br />
+
+              <TextField
+                id="outlined-basic"
+                label="New Password"
+                variant="outlined"
+                type="password"
+                sx={{ marginTop: "10px" }}
+                value={newPasswordData.password}
+                onChange={(e) => passwordHandler(e)}
+              />
+
+              <br />
+
+              <span style={{ color: "red" }}>
+                {passwordCheck && passwordCheck}
+              </span>
+
+              <br />
+
+              <TextField
+                id="outlined-basic"
+                label="Confirm Password"
+                variant="outlined"
+                type="password"
+                sx={{ marginTop: "10px" }}
+                value={newPasswordData.confirmPassword}
+                onChange={(e) => confirmPasswordHandler(e)}
+              />
+
+              <br />
+
+              <span style={{ color: "red" }}>
+                {bothPasswordCheck && bothPasswordCheck}
+              </span>
+
+              <br />
+
+              <Button
+                variant="contained"
+                sx={{ marginTop: "10px" }}
+                onClick={() => changePasswordHandler()}
+              >
+                Set New Password
+              </Button>
             </Box>
-        </div>
-    )
+          </Modal>
+        </Box>
+      </div>
+    );
 }
 
 export default HeaderPage

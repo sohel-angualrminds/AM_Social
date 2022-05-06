@@ -142,8 +142,6 @@ function MainPage() {
     console.log(like);
     console.log(expanded);
     
-
-
     //expand comment
 
     const handleExpandClick = (commentIndex) => {
@@ -308,7 +306,7 @@ function MainPage() {
         <div>
             <HeaderPage />
 
-            <div style={{ border: '1px solid black', margin: '10px', marginLeft: '100px', marginRight: '100px' }} >
+            <div style={{  margin: '10px', marginLeft: '100px', marginRight: '100px' }} >
                 <Button variant="contained" onClick={handleOpen} sx={{ marginTop: '5px', marginBottom: '5px' }} >+ Add New Post</Button>
 
                 <Modal
