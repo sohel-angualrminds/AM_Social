@@ -89,6 +89,8 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
             };
             if (req.file && req.file.originalname)
                 newObj.image = req.file.path;
+            else
+                newObj.image = '';
 
             result = await profile.findOneAndUpdate({ userId: req.id }, { $set: newObj });
             if (result)
@@ -109,8 +111,11 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
 
             if (req.file && req.file.originalname)
                 newObj.image = req.file.path;
+            else
+                newObj.image = '';
 
-            let result1 = await postData(newObj)
+            let result1 = await postData(newObj);
+            
             if (result1)
                 return res.status(200).send({ success: true, message: "user update successfully" });
             else
