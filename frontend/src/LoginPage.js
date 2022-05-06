@@ -35,7 +35,7 @@ function LoginPage(props) {
         email: '',
         password: ''
     })
-
+ 
     const emailHandler = (e) => {
         // console.log(e.target.value)
         setLoginData(prev => {

@@ -100,7 +100,7 @@ function SignUpPage()
             const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
             return specialChars.test(str);
         }
-
+ 
         if( userData.password.length <=5 )
         {
             setCheckPassword('Minimum length of password is 6')
