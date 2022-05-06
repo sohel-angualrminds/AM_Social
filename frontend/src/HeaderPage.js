@@ -152,6 +152,8 @@ function HeaderPage() {
             setBothPassword('new password and confirm password should be same')
       }
       else {
+          setPasswordCheck('')
+          setBothPassword('')
         axios
           .put(
             `/user/changepassword/${userData.userInfo._id}`,

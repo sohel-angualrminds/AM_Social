@@ -97,7 +97,7 @@ function EditPage() {
 
   //datePicker
 
-  const [value, setValue] = React.useState(getRequest ? newUserData.dob : null);
+  const [value, setValue] = React.useState(newUserData.dob ? newUserData.dob : null);
 
   const imageHandler = (e) => {
     console.log(e.target.files[0]);
@@ -303,7 +303,7 @@ function EditPage() {
                     aria-labelledby="demo-radio-buttons-group-label"
                     name="radio-buttons-group"
                     sx={{ display: "inlineflex" }}
-                    defaultChecked={getRequest ? newUserData.gender : null}
+                    value={newUserData.gender && newUserData.gender}
                     onChange={(e) => genderHandler(e)}
                   >
                     <FormControlLabel
@@ -331,7 +331,7 @@ function EditPage() {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="Basic example"
-                    value={value}
+                    value={ value}
                     onChange={(newValue) => {
                       function convert(str) {
                         var date = new Date(str),
@@ -370,6 +370,7 @@ function EditPage() {
               <div style={{ marginTop: "3px" }}>
                 <MuiPhoneNumber
                   defaultCountry={"in"}
+                  value={newUserData.mobileNumber && newUserData.mobileNumber}
                   variant="outlined"
                   onChange={(e) => mobileHanlder(e)}
                 />
