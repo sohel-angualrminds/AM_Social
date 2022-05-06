@@ -6,7 +6,7 @@ import SignUpPage from './SignUpPage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ProtectedRoutes from './ProtectedRoutes'
 import { useState } from 'react'
- 
+  
 function App() {
   const [isLoggendIn, setIsLoggedIn] = useState(() => localStorage.getItem('isLoggendIn') ? localStorage.getItem('isLoggendIn') : null);
 

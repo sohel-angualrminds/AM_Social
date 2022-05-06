@@ -22,7 +22,10 @@ import MuiAlert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar'
 import countryCodes from 'country-codes-list'
+import MuiPhoneNumber from 'material-ui-phone-number';
+import { join } from 'country-codes-list/countriesData';
 
+ 
 const myCountryCodesObject = countryCodes.customList('countryCode', '[{countryCode}] {countryNameEn}: +{countryCallingCode}')
    
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -60,7 +63,8 @@ function EditPage()
         gender : '',
         dob : '',
         email : '',
-        mobileNumber : ''
+        mobileNumber : '',
+        countryCode : ''
     })
 
     const [getRequest,setGetRequest] = React.useState(0)
@@ -166,16 +170,27 @@ function EditPage()
     }
 
     const mobileHanlder = (e) => {
-        console.log(e.target.value)
+        console.log(e)
+
+        // console.log(e.split(' ')[0].slice(1))
         setNewUserData(prev => {
             return {
                 ...prev,
-                mobileNumber : e.target.value
+                countryCode : e.split(' ')[0].slice(1)
+            }
+        })
+        
+        console.log(e.split(' ')[1].split('-')[0].concat(e.split(' ')[1].split('-')[1]));
+        
+        setNewUserData(prev => {
+            return {
+                ...prev,
+                mobileNumber : e.split(' ')[1].split('-')[0].concat(e.split(' ')[1].split('-')[1])
             }
         })
     }
 
-    console.log(newUserData);
+    // console.log(newUserData);
 
     const updateHandler = () => {
 
@@ -187,6 +202,7 @@ function EditPage()
         formData.append("dob",newUserData.dob)
         formData.append("email",newUserData.email)
         formData.append("mobileNumber",newUserData.mobileNumber)
+        formData.append("countryCode",newUserData.countryCode)
 
         axios.put(`/profile/edit`,formData,{
             headers: {
@@ -199,7 +215,10 @@ function EditPage()
             navigate('/mainpage')
             // localStorage.setItem('loginUserData',JSON.stringify(newUserData))
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+            console.log(error)
+            alert('please provide appropriate data')
+        })
     }
 
     //toaster messages
@@ -336,11 +355,9 @@ function EditPage()
                             <br />
 
                             <div style={{marginTop : '3px'}}>
-                                <TextField 
-                                    id="outlined-basic" 
-                                    label="Mobile Number *" 
-                                    variant="outlined" 
-                                    value={newUserData.mobileNumber}
+                                <MuiPhoneNumber 
+                                    defaultCountry={'in'} 
+                                    variant="outlined"
                                     onChange = { (e) => mobileHanlder(e) }
                                 />
                             </div>
