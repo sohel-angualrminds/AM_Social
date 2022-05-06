@@ -87,11 +87,9 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
         let userExistUsers = await users.findOne({ email: email });
 
         if (checksCount.length === 0 && userExistProfileCount.length == 0) {
-            let img = ''
-            if (req.file && req.file.originalname)
-                img = req.file.path;
+
+
             let newObj = {
-                image: img,
                 name,
                 bio,
                 gender,
@@ -101,6 +99,9 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
                 countryCode,
                 userID: req.id
             };
+            if (req.file && req.file.originalname)
+                newObj.image = req.file.path;
+
             result = await profile.findOneAndUpdate({ userId: req.id }, { $set: newObj });
             let result1 = await users.findOneAndUpdate({ _id: req.id }, { $set: { email: email } })
             console.log("if", result1);
@@ -111,12 +112,8 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
         }
         else {
             if (!userExistProfile && (req.id == userExistUsers._id) && (userExistUsers.email == email)) {
-                let img = ''
-                if (req.file && req.file.originalname)
-                    img = req.file.path;
-                
+
                 let newObj = {
-                    image: img,
                     name,
                     bio,
                     gender,
@@ -125,6 +122,10 @@ profileRouter.put('/edit', verifyToken, upload.single('image'), async (req, res)
                     mobileNumber,
                     userID: req.id
                 };
+
+                if (req.file && req.file.originalname)
+                    newObj.image = req.file.path;
+
                 let result = await users.findOneAndUpdate({ _id: req.id }, { $set: { email: email } })
                 let result1 = await postData(newObj)
 
