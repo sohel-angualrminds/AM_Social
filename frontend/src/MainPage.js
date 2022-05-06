@@ -79,17 +79,18 @@ function MainPage() {
     const [like, setLike] = React.useState([])
 
     const [toggle, setToggle] = React.useState(1);
+    const [pageNumber,setPageNumber] = React.useState(1)
 
     const [skeleton, setSkeleton] = React.useState(true)
 
     React.useEffect(() => {
-        axios.get(`/feed/?page=${toggle}&limit=${limit}`, {
+        axios.get(`/feed/?page=${pageNumber}&limit=${limit}`, {
             headers: {
                 Authorization: token1
             }
         })
             .then(response => {
-                // console.log(response.data.data.results)
+                console.log(response.data.data.results)
                 const tempArray = Array(response.data.data.results.length).fill(false)
                 setExpanded(tempArray)
                 const tempArray1 = Array(response.data.data.results.length).fill(false)
@@ -106,7 +107,7 @@ function MainPage() {
 
 
     React.useEffect(() => {
-        axios.get(`/feed/?page=${toggle}&limit=${limit}`, {
+        axios.get(`/feed/?page=${pageNumber}&limit=${limit}`, {
             headers: {
                 Authorization: token1
             }
@@ -117,7 +118,7 @@ function MainPage() {
                 setExpanded(tempArray)
                 // const tempArray1 = Array(response.data.data.results.length).fill(false)
                 // setLike(tempArray1)
-                if (toggle === 1) {
+                if (pageNumber === 1) {
                     setAllPostsData(response.data.data.results);
                 } else {
                     setAllPostsData([...allPostsData, response.data.data.results])
@@ -126,14 +127,36 @@ function MainPage() {
             .catch(error => console.log(error))
     }, [toggle]);
 
+    React.useEffect(() => {
+        axios.get(`/feed/?page=${pageNumber}&limit=${limit}`, {
+            headers: {
+                Authorization: token1
+            }
+        })
+            .then(response => {
+                // console.log(response.data.data.results)
+                const tempArray = Array(response.data.data.results.length).fill(false)
+                setExpanded(tempArray)
+                // const tempArray1 = Array(response.data.data.results.length).fill(false)
+                // setLike(tempArray1)
+                if (pageNumber === 1) {
+                    setAllPostsData(response.data.data.results);
+                } else {
+                    setAllPostsData([...allPostsData, response.data.data.results])
+                }
+            })
+            .catch(error => console.log(error))
+    }, [pageNumber]);
+
+
     window.onscroll = debounce(() => {
-        console.log(toggle);
+        console.log(pageNumber);
         if (
             window.innerHeight + document.documentElement.scrollTop ===
             document.documentElement.offsetHeight
         ) {
             console.log("sdfnsdkjgskdjbg");
-            setToggle((prev) => prev + 1);
+            setPageNumber((prev) => prev + 1);
         }
     }, 100);
 
@@ -216,7 +239,7 @@ function MainPage() {
 
         if (newPostData.image === '' || newPostData.caption === '') {
             handleClick3()
-        }
+        } 
         else {
             axios.post('/feed/addPost', formData, {
                 headers: {
@@ -364,7 +387,7 @@ function MainPage() {
                 skeleton
                     ?
                     allPostsData && allPostsData.map((item, index) => {
-                        return <Skeleton key={index} variant="rectangular" sx={{ maxWidth: 300, marginTop: '30px', marginLeft: '100px', height: '300px' }} />
+                        return <Skeleton key={index} variant="rectangular" sx={{ maxWidth: 300, marginTop: '30px', marginLeft: '40%', height: '300px' }} />
                     })
                     :
                     allPostsData && allPostsData.map((postItem, postIndex) => {

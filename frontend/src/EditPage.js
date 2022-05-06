@@ -192,7 +192,7 @@ function EditPage()
             headers: {
                 Authorization: userData.token
             }
-        })
+        }) 
         .then(response => {
             console.log(response);
             handleClick()
