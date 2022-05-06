@@ -16,18 +16,13 @@ const profile_schema = new mongoose.Schema({
     date: {
         type: String,
     },
-    email: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
     image: {
         type: String
     },
     mobileNumber: {
+        type: String
+    },
+    countryCode: {
         type: String
     },
     userID: {

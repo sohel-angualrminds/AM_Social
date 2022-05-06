@@ -58,139 +58,74 @@ profileRouter.put(
   upload.single("image"),
   async (req, res) => {
     try {
-      const {
-        image,
-        name,
-        bio,
-        gender,
-        dob: date,
-        email,
-        mobileNumber,
-        countryCode,
-      } = req.body;
-      const errorArray = [];
-      if (
-        !name ||
-        !gender ||
-        !email ||
-        !email.includes("@") ||
-        !email.includes(".") ||
-        email.includes("@.") ||
-        !mobileNumber.length == 10
-      ) {
-        if (!name) errorArray.push("name");
+        const { image, name, bio, gender, dob: date, mobileNumber, countryCode } = req.body;
+        const errorArray = [];
+        if (!name || !gender || !mobileNumber.length == 10) {
+            if (!name)
+                errorArray.push('name');
 
-        if (!gender) errorArray.push("gender");
+            if (!gender)
+                errorArray.push('gender');
 
-        if (
-          !email ||
-          !email.includes("@") ||
-          !email.includes(".") ||
-          email.includes("@.")
-        )
-          errorArray.push("email");
+            if (!mobileNumber.length == 10)
+                errorArray.push('mobile Number should be in valid form');
 
-        if (!mobileNumber.length === 10)
-          errorArray.push("mobile Number should be in valid form");
-
-        return res.status(422).send({
-          success: false,
-          message: "please provide appropriate data",
-          errorIn: JSON.stringify(errorArray),
-          backendFieldis: "image, name, bio, gender, dob, email, mobileNumber",
-        });
-      }
-      let result = null;
-
-      let checksCount = await users.find({ email: email });
-      let userExistProfileCount = await profile.find({ email: email });
-
-      let userExistProfile = await profile.findOne({ email: email });
-      let userExistUsers = await users.findOne({ email: email });
-
-      if (checksCount.length === 0 && userExistProfileCount.length == 0) {
-        let newObj = {
-          name,
-          bio,
-          gender,
-          date,
-          email,
-          mobileNumber,
-          countryCode,
-          userID: req.id,
-        };
-        if (req.file && req.file.originalname) newObj.image = req.file.path;
-
-        result = await profile.findOneAndUpdate(
-          { userId: req.id },
-          { $set: newObj }
-        );
-        let result1 = await users.findOneAndUpdate(
-          { _id: req.id },
-          { $set: { email: email } }
-        );
-
-        if (result1)
-          return res
-            .status(200)
-            .send({ success: true, message: "user update successfully" });
-        else
-          return res.status(400).send({
-            success: false,
-            message: "failed to update please try again later",
-          });
-      } else {
-        if (req.id == userExistUsers._id && userExistUsers.email == email) {
-          let newObj = {
-            name,
-            bio,
-            gender,
-            date,
-            email,
-            mobileNumber,
-            countryCode,
-            userID: req.id,
-          };
-
-          if (req.file && req.file.originalname) newObj.image = req.file.path;
-
-          let result = await users.findOneAndUpdate(
-            { _id: req.id },
-            { $set: { email: email } }
-          );
-          let result1 = await postData(newObj);
-
-          if (result1)
-            return res
-              .status(200)
-              .send({ success: true, message: "user update successfully" });
-          else
-            return res.status(400).send({
-              success: false,
-              message: "failed to update please try again later",
-            });
-        } else {
-          if (!userExistProfile || userExistUsers.email != email) {
-            return res.status(401).send({
-              success: false,
-              message: "Email must be equal to login email",
-            });
-          } else {
-            return res
-              .status(422)
-              .send({ success: false, message: "email already in use" });
-          }
+            return res.status(422).send({
+                success: false,
+                message: "please provide appropriate data",
+                errorIn: JSON.stringify(errorArray),
+                backendFieldis: "image, name, bio, gender, dob,countryCode, mobileNumber"
+            })
         }
-      }
+        let result = null;
+        let userExistProfile = await profile.findOne({ userId: req.id });
+
+        if (userExistProfile) {
+            let newObj = {
+                name,
+                bio,
+                gender,
+                date,
+                mobileNumber,
+                countryCode,
+                userID: req.id
+            };
+            if (req.file && req.file.originalname)
+                newObj.image = req.file.path;
+
+            result = await profile.findOneAndUpdate({ userId: req.id }, { $set: newObj });
+            if (result)
+                return res.status(200).send({ success: true, message: "user update successfully" });
+            else
+                return res.status(400).send({ success: false, message: "failed to update please try again later" });
+        }
+        else {
+            let newObj = {
+                name,
+                bio,
+                gender,
+                date,
+                mobileNumber,
+                countryCode,
+                userID: req.id
+            };
+
+            if (req.file && req.file.originalname)
+                newObj.image = req.file.path;
+
+            let result1 = await postData(newObj)
+            if (result1)
+                return res.status(200).send({ success: true, message: "user update successfully" });
+            else
+                return res.status(400).send({ success: false, message: "failed to update please try again later" });
+        }
     } catch (error) {
-      console.log(error);
-      return res.status(500).send({
-        success: false,
-        message: "internal error",
-        backendFieldis:
-          "image, name, bio, gender, dob, email, mobileNumber also provide",
-        error: error,
-      });
+        return res.status(500).send({
+            success: false,
+            message: "internal error",
+            backendFieldis: "image, name, bio, gender, dob,countryCode, mobileNumber also provide",
+            error: error,
+        });
     }
   }
 );
