@@ -24,11 +24,12 @@ import Avatar from '@mui/material/Avatar'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-
+import InfiniteScroll from 'react-infinite-scroll-component';
+ 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-const limit = 3;
+const limit = 2
 
 const style = {
     position: 'absolute',
@@ -91,11 +92,15 @@ function MainPage() {
         })
             .then(response => {
                 console.log(response.data.data.results)
+
                 const tempArray = Array(response.data.data.results.length).fill(false)
                 setExpanded(tempArray)
+
                 const tempArray1 = Array(response.data.data.results.length).fill(false)
                 setLike(tempArray1)
+
                 setAllPostsData(response.data.data.results)
+
                 setTimeout(() => {
                     setSkeleton(false)
                 }, 250)
@@ -103,62 +108,41 @@ function MainPage() {
             .catch(error => console.log(error))
     }, [])
 
-
-
-
-    React.useEffect(() => {
-        axios.get(`/feed/?page=${pageNumber}&limit=${limit}`, {
+    const fetchData = () => {
+        console.log('hjbdvhf');
+        setTimeout(() => {
+            axios.get(`/feed/?page=${pageNumber+1}&limit=${limit}`, {
             headers: {
                 Authorization: token1
             }
         })
             .then(response => {
-                // console.log(response.data.data.results)
-                const tempArray = Array(response.data.data.results.length).fill(false)
-                setExpanded(tempArray)
+                setPageNumber(prev => prev + 1)
+                console.log(response.data.data.results)
+                // const tempArray = Array(response.data.data.results.length).fill(false)
+                // setExpanded(tempArray)
                 // const tempArray1 = Array(response.data.data.results.length).fill(false)
                 // setLike(tempArray1)
-                if (pageNumber === 1) {
-                    setAllPostsData(response.data.data.results);
-                } else {
-                    setAllPostsData([...allPostsData, response.data.data.results])
-                }
+                // if (pageNumber === 1) {
+                //     setAllPostsData(response.data.data.results);
+                // } else {
+                    // setTimeout(() => {
+                        setAllPostsData([...allPostsData, ...response.data.data.results])
+                        setLike([...like,...Array(response.data.data.results.length).fill(false)])
+                        setExpanded([...expanded,...Array(response.data.data.results.length).fill(false)])
+                    // },100)
+                    
+                // }
             })
             .catch(error => console.log(error))
-    }, [toggle]);
+        },1500)
+    }
 
-    React.useEffect(() => {
-        axios.get(`/feed/?page=${pageNumber}&limit=${limit}`, {
-            headers: {
-                Authorization: token1
-            }
-        })
-            .then(response => {
-                // console.log(response.data.data.results)
-                const tempArray = Array(response.data.data.results.length).fill(false)
-                setExpanded(tempArray)
-                // const tempArray1 = Array(response.data.data.results.length).fill(false)
-                // setLike(tempArray1)
-                if (pageNumber === 1) {
-                    setAllPostsData(response.data.data.results);
-                } else {
-                    setAllPostsData([...allPostsData, response.data.data.results])
-                }
-            })
-            .catch(error => console.log(error))
-    }, [pageNumber]);
+    console.log(allPostsData);
+    console.log(like);
+    console.log(expanded);
+    
 
-
-    window.onscroll = debounce(() => {
-        console.log(pageNumber);
-        if (
-            window.innerHeight + document.documentElement.scrollTop ===
-            document.documentElement.offsetHeight
-        ) {
-            console.log("sdfnsdkjgskdjbg");
-            setPageNumber((prev) => prev + 1);
-        }
-    }, 100);
 
     //expand comment
 
@@ -284,7 +268,6 @@ function MainPage() {
         })
             .then(response => {
                 console.log(response)
-                setToggle(prev => prev + 1)
             })
             .catch(error => console.log(error))
     }
@@ -383,6 +366,16 @@ function MainPage() {
                 </Alert>
             </Snackbar>
 
+            <InfiniteScroll
+                dataLength={allPostsData.length} 
+                next={fetchData}
+                hasMore={true}
+                loader={<h4>Loading...</h4>}
+                
+            >
+
+            
+
             {
                 skeleton
                     ?
@@ -421,7 +414,7 @@ function MainPage() {
                                 <IconButton aria-label="add to favorites" sx={{ color: like[postIndex] ? 'red' : '' }} onClick={() => likePostHandler(postItem._id, postItem.likesCount, postIndex)}>
                                     <FavoriteIcon />
                                 </IconButton>
-                                {postItem.likesCount}
+                                {like[postIndex] ? postItem.likesCount+1 : postItem.likesCount}
                                 <ExpandMore
                                     expand={expanded[postIndex]}
                                     onClick={() => handleExpandClick(postIndex)}
@@ -458,6 +451,8 @@ function MainPage() {
                         </Card>
                     })
             }
+
+            </InfiniteScroll>
 
         </div>
     )
