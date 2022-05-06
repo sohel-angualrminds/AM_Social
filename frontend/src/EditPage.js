@@ -172,11 +172,11 @@ function EditPage()
     const mobileHanlder = (e) => {
         console.log(e)
 
-        // console.log(e.split(' ')[0].slice(1))
+        console.log(e.split(' ')[0].slice(1))
         setNewUserData(prev => {
             return {
                 ...prev,
-                countryCode : e.split(' ')[0].slice(1)
+                countryCode : e.split(' ')[0].slice(1) + ""
             }
         })
         
@@ -185,7 +185,7 @@ function EditPage()
         setNewUserData(prev => {
             return {
                 ...prev,
-                mobileNumber : e.split(' ')[1].split('-')[0].concat(e.split(' ')[1].split('-')[1])
+                mobileNumber : e.split(' ')[1].split('-')[0].concat(e.split(' ')[1].split('-')[1]) + ""
             }
         })
     }
