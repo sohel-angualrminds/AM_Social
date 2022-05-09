@@ -25,7 +25,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import InfiniteScroll from 'react-infinite-scroll-component';
- 
+  
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -303,11 +303,11 @@ function MainPage() {
     // console.log(newPostData);    
 
     return (
-        <div>
+        <div style={{backgroundColor:'#D3D3D3'}}>
             <HeaderPage />
 
             <div style={{ margin: '10px', marginLeft: '100px', marginRight: '100px' }} >
-                <Button variant="contained" onClick={handleOpen} sx={{ marginTop: '5px', marginBottom: '5px' }} >+ Add New Post</Button>
+                <Button variant="contained" onClick={handleOpen} sx={{ marginTop: '5px', marginBottom: '5px',backgroundColor:'#F4A4A4' }} >+ Add New Post</Button>
 
                 <Modal
                     open={open}
@@ -382,10 +382,10 @@ function MainPage() {
                     })
                     :
                     allPostsData && allPostsData.map((postItem, postIndex) => {
-                        return <Card sx={{ maxWidth: 300, marginTop: '30px', marginLeft: '40%' }} key={postIndex}>
+                        return <Card sx={{ maxWidth: 350, marginTop: '30px', marginLeft: '40%',borderRadius:'10px' }} key={postIndex}>
                             <CardHeader
                                 avatar={
-                                    <Avatar sx={{ bgcolor: 'red' }} aria-label="recipe">
+                                    <Avatar sx={{ bgcolor: '#EFB7BA',color:'#194F92' }} aria-label="recipe">
                                         {postItem.userINFO.firstName && postItem.userINFO.firstName.split(' ')[0][0]}
                                     </Avatar>
                                 }
@@ -404,8 +404,8 @@ function MainPage() {
                                 alt="Paella dish"
                             />
                             <CardContent>
-                                <Typography variant="body2" color="text.secondary">
-                                    {postItem.caption}
+                                <Typography variant="body2" color="text.secondary" >
+                                    <h3>{postItem.caption}</h3>
                                 </Typography>
                             </CardContent>
                             <CardActions disableSpacing>

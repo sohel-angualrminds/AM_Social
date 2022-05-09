@@ -24,7 +24,7 @@ import Avatar from "@mui/material/Avatar";
 import countryCodes from "country-codes-list";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { join } from "country-codes-list/countriesData";
-
+ 
 const myCountryCodesObject = countryCodes.customList(
   "countryCode",
   "[{countryCode}] {countryNameEn}: +{countryCallingCode}"
@@ -85,7 +85,7 @@ function EditPage() {
           name: response.data.data.name,
           bio: response.data.data.bio,
           gender: response.data.data.gender,
-          dob: response.data.data.dob,
+          dob: response.data.data.date,
           email: response.data.data.email,
           mobileNumber: response.data.data.mobileNumber,
         });
@@ -97,7 +97,7 @@ function EditPage() {
 
   //datePicker
 
-  const [value, setValue] = React.useState(newUserData.dob ? newUserData.dob : null);
+  const [value, setValue] = React.useState(newUserData.dob ? newUserData.dob : new Date());
 
   const imageHandler = (e) => {
     console.log(e.target.files[0]);
@@ -233,13 +233,17 @@ function EditPage() {
 
   return (
     <div>
-      <HeaderPage />
 
-      <h1>Edit Profile</h1>
+      <HeaderPage />      
 
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1,backgroundColor:'#D3D3D3',margin:'30px',borderRadius:'10px' }}>
+
+        <h1 style={{color:'#194F92'}}>Edit Profile</h1>
+
+        <br />
+
         <Grid container spacing={2}>
-          <Grid item xs={4} sx={{ border: "1px solid black" }}>
+          <Grid item xs={4} sx={{  }}>
             {/* <div style={{height:'200px',width:'200px',marginLeft:'50px',backgroundColor:'skyblue'}}>
                             <img src={newUserData.image==='' ? userImg : URL.createObjectURL(newUserData.image)} style={{height:'200px',width:'200px'}} alt='user' />
                         </div> */}
@@ -248,7 +252,7 @@ function EditPage() {
               src={
                 newUserData.image === ""
                   ? userImg
-                  : getRequest
+                  : getRequest        
                   ? newUserData.image
                   : URL.createObjectURL(newUserData.image)
               }
@@ -267,7 +271,7 @@ function EditPage() {
             </Button>
           </Grid>
 
-          <Grid item xs={8} sx={{ border: "1px solid black" }}>
+          <Grid item xs={8} sx={{  }}>
             <div>
               <div style={{ marginTop: "3px" }}>
                 <TextField
@@ -330,8 +334,8 @@ function EditPage() {
               <div style={{ marginTop: "3px" }}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
-                    label="Basic example"
-                    value={ value}
+                    label="Date of Birth"
+                    value={ newUserData.dob ? newUserData.dob : new Date()}
                     onChange={(newValue) => {
                       function convert(str) {
                         var date = new Date(str),
@@ -392,6 +396,7 @@ function EditPage() {
             </div>
           </Grid>
         </Grid>
+
       </Box>
 
       <Snackbar
