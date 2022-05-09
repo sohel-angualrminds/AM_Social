@@ -79,7 +79,7 @@ function MainPage() {
     const [expanded, setExpanded] = React.useState([]);
     const [like, setLike] = React.useState([])
 
-    const [toggle, setToggle] = React.useState(1);
+    // const [toggle, setToggle] = React.useState(1);
     const [pageNumber,setPageNumber] = React.useState(1)
 
     const [skeleton, setSkeleton] = React.useState(true)
@@ -109,7 +109,7 @@ function MainPage() {
     }, [])
 
     const fetchData = () => {
-        console.log('hjbdvhf');
+        // console.log('hjbdvhf');
         setTimeout(() => {
             axios.get(`/feed/?page=${pageNumber+1}&limit=${limit}`, {
             headers: {
@@ -230,7 +230,7 @@ function MainPage() {
             })
                 .then(response => {
                     console.log(response)
-                    setToggle(prev => prev + 1)
+                    // setToggle(prev => prev + 1)
                     setNewPostData({
                         image: '',
                         caption: ''
@@ -295,7 +295,19 @@ function MainPage() {
         })
             .then(response => {
                 console.log(response)
-                setToggle(prev => prev + 1)
+                // setToggle(prev => prev + 1)
+                axios.get(`/feed/?page=${pageNumber}&limit=${limit}`, {
+                    headers: {
+                        Authorization: token1
+                    }
+                })
+                .then(response =>{
+                    console.log(response.data.data.results);
+                    setAllPostsData(response.data.data.results)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
             })
             .catch(error => console.log(error))
     }
@@ -370,9 +382,7 @@ function MainPage() {
                 hasMore={true}
                 loader={<h4>Loading...</h4>}
                 
-            >
-
-            
+            >            
 
             {
                 skeleton
@@ -440,7 +450,10 @@ function MainPage() {
 
                                     {
                                         postItem.comments.map((commentItem, commentIndex) => {
-                                            return <Typography paragraph key={commentIndex} >{commentItem.comment}</Typography>
+                                            return <Typography paragraph key={commentIndex} sx={{display: "inlineflex"}} >
+                                                <Avatar>{commentItem.firstName.split(' ')[0][0]}</Avatar>
+                                                {commentItem.comment}
+                                            </Typography>
                                         })
                                     }
 

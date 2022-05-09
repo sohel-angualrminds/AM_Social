@@ -62,7 +62,7 @@ function LoginPage(props) {
     const responseGoogle = (res) => {
         axios.post('/user/google-login', { email: res.profileObj.email }).then(response => {
             console.log(response);
-            if (response.status == 200) {
+            if (response.status === 200) {
                 localStorage.setItem('userData', JSON.stringify(response.data))
                 localStorage.setItem('isLoggendIn', true);
                 checkLoggedIn(true);

@@ -252,7 +252,7 @@ function EditPage() {
               src={
                 newUserData.image === ""
                   ? userImg
-                  : getRequest        
+                  : getRequest  
                   ? newUserData.image
                   : URL.createObjectURL(newUserData.image)
               }
