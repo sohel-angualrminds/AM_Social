@@ -8,7 +8,7 @@ import ReCAPTCHA from "react-google-recaptcha"
 import axios from 'axios'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
- 
+  
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -62,7 +62,7 @@ function LoginPage(props) {
     const responseGoogle = (res) => {
         axios.post('/user/google-login', { email: res.profileObj.email }).then(response => {
             console.log(response);
-            if (response.status == 200) {
+            if (response.status === 200) {
                 localStorage.setItem('userData', JSON.stringify(response.data))
                 localStorage.setItem('isLoggendIn', true);
                 checkLoggedIn(true);
@@ -98,52 +98,59 @@ function LoginPage(props) {
 
     return (
         <div>
-            <h1>Login </h1>
             <Box
                 sx={{
-                    width: 500,
-                    height: 500,
-                    backgroundColor: 'lavender',
-                    // '&:hover': {
-                    // backgroundColor: '',
-                    // opacity: [0.9, 0.8, 0.7],
-                    // },
-                    marginLeft: '30%',
+                    width: 600,
+                    height: 600,
+                    backgroundColor: '#daf0ff',
+                    marginLeft: '20%',
                     marginTop: "5%",
                     borderRadius: '10px'
                 }}
             >
+                <h1 style={{color:'#21A5B7'}}>Login </h1>
+
+                <br />
+
                 <TextField
                     id="filled-basic1"
                     label="Email*"
                     variant="filled"
-                    sx={{ marginTop: '10px' }}
+                    sx={{ marginTop: '20px' }}
                     value={loginData.email}
                     onChange={(e) => emailHandler(e)}
                     error={clickLogin && loginData.email === "" ? true : false}
                     helperText={clickLogin && loginData.email === "" ? "Enter Email " : ''}
                 />
+
                 <br />
+
                 <TextField
                     id="filled-basic2"
                     label="Password*"
                     variant="filled"
                     type="password"
-                    sx={{ marginTop: '10px' }}
+                    sx={{ marginTop: '20px' }}
                     value={loginData.password}
                     onChange={(e) => passwordHandler(e)}
                     error={clickLogin && loginData.password === "" ? true : false}
                     helperText={clickLogin && loginData.password === "" ? "Enter Password " : ''}
                 />
+
                 <br />
+
                 <ReCAPTCHA
                     ref={recaptchaRef}
                     size="invisible"
                     sitekey="6Ld3COIZAAAAAC3A_RbO1waRz6QhrhdObYOk7b_5"
                 />
+
                 <br />
-                <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => loginHandler()}>Login</Button>
+
+                <Button variant="contained" sx={{ marginTop: '20px', marginBottom: '20px',backgroundColor:'#45b6fe' }} onClick={() => loginHandler()}>Login</Button>
+
                 <br />
+
                 <GoogleLogin
                     clientId="186822021258-a22h3l16t1vfn0vm2gb4srruekjvrtoi.apps.googleusercontent.com"
                     buttonText="Log in with Google"
@@ -151,8 +158,10 @@ function LoginPage(props) {
                     onFailure={responseGoogle}
                     cookiePolicy={'single_host_origin'}
                 />
+
                 <br />
-                <Button variant="contained" sx={{ marginTop: '10px', marginBottom: '10px' }} onClick={() => navigate('/signuppage')}>SignUp</Button>
+
+                <Button variant="contained" sx={{ marginTop: '20px', marginBottom: '10px' ,backgroundColor:'#45b6fe' }} onClick={() => navigate('/signuppage')}>SignUp</Button>
 
             </Box>
 

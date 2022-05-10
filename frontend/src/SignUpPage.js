@@ -11,7 +11,7 @@ import MuiAlert from '@mui/material/Alert';
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-   
+    
 function SignUpPage() 
 {
     const navigate = useNavigate()
@@ -135,28 +135,28 @@ function SignUpPage()
     return (
         <div>
 
-            <h1>Sign Up</h1>
+            
 
             <Box
                 sx={{
-                    width: 500,
-                    height: 500,
-                    backgroundColor: 'lavender',
-                    // '&:hover': {
-                    // backgroundColor: '',
-                    // opacity: [0.9, 0.8, 0.7],
-                    // },
-                    marginLeft : '30%',
+                    width: 600,
+                    height: 600,
+                    backgroundColor: '#daf0ff',
+                    marginLeft : '20%',
                     marginTop: "5%",
                     borderRadius : '10px'
                 }}
             >
 
+                <h1 style={{color:'#21A5B7'}}>Sign Up</h1>
+
+                <br />
+
                 <TextField 
                     id="filled-basic" 
                     label="First Name*" 
                     variant="filled" 
-                    sx={{marginTop:'10px'}}
+                    sx={{marginTop:'15px'}}
                     value={userData.firstName} 
                     onChange={(e) => firstNameHandler(e)}
                     error={ clickSignUp && userData.firstName === '' ? true : false } 
@@ -169,7 +169,7 @@ function SignUpPage()
                     id="filled-basic" 
                     label="Last Name *" 
                     variant="filled" 
-                    sx={{marginTop:'10px'}}
+                    sx={{marginTop:'15px'}}
                     value={userData.lastName} 
                     onChange={(e) => lastNameHandler(e)} 
                     error={ clickSignUp && userData.lastName === '' ? true : false }
@@ -182,7 +182,7 @@ function SignUpPage()
                     id="filled-basic" 
                     label="Email *" 
                     variant="filled" 
-                    sx={{marginTop:'10px'}}
+                    sx={{marginTop:'15px'}}
                     value={userData.email} 
                     onChange={(e) => emailHandler(e)} 
                     error={ clickSignUp && userData.email === '' ? true : false }
@@ -200,7 +200,7 @@ function SignUpPage()
                     label="Password *" 
                     type='password'
                     variant="filled" 
-                    sx={{marginTop:'10px'}}
+                    sx={{marginTop:'15px'}}
                     value={userData.password} 
                     onChange={(e) => passwordHandler(e)} 
                     error={ clickSignUp && userData.password === '' ? true : false }
@@ -213,11 +213,11 @@ function SignUpPage()
 
                 <br />
 
-                <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => signUpButtonHandler() }>Sign Up</Button>
+                <Button variant="contained" sx={{marginTop:'15px',backgroundColor:'#45b6fe'}} onClick={ () => signUpButtonHandler() }>Sign Up</Button>
 
                 <br />
 
-                <Button variant="contained" sx={{marginTop:'10px'}} onClick={ () => navigate('/')}>Login</Button>
+                <Button variant="contained" sx={{marginTop:'15px',backgroundColor:'#45b6fe'}} onClick={ () => navigate('/')}>Login</Button>
 
             </Box>
 

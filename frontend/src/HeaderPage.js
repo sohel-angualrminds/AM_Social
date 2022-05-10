@@ -12,7 +12,7 @@ import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Stack } from '@mui/material'
- 
+  
 const style = {
     position: 'absolute',
     top: '50%',
@@ -24,7 +24,7 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-
+    
 function HeaderPage() {
 
     const navigate = useNavigate()
@@ -152,6 +152,8 @@ function HeaderPage() {
             setBothPassword('new password and confirm password should be same')
       }
       else {
+          setPasswordCheck('')
+          setBothPassword('')
         axios
           .put(
             `/user/changepassword/${userData.userInfo._id}`,
@@ -177,14 +179,14 @@ function HeaderPage() {
     return (
       <div>
         <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
+          <AppBar position="static" sx={{backgroundColor:'#CBD5F0'}}>
             <Toolbar>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                <p>AM Social Feed</p>
+                <h3 style={{color:'#194F92'}}>AM Social Feed</h3>
               </Typography>
 
               <Avatar
-                sx={{ marginLeft: "65%" }}
+                sx={{ marginLeft: "65%",backgroundColor:'#194F92' }}
                 onClick={handleClick}
                 src={loginUserData.image && loginUserData.image}
               >
@@ -193,10 +195,10 @@ function HeaderPage() {
                   userData.userInfo.firstName.split("")[0]}
               </Avatar>
               <Stack direction={"row"} gap={1}>
-                <label>
+                <label style={{color:'#194F92'}}>
                   {userData.userInfo.firstName && userData.userInfo.firstName}
                 </label>
-                <label>
+                <label style={{color:'#194F92'}}>
                   {userData.userInfo.lastName && userData.userInfo.lastName}
                 </label>
               </Stack>
@@ -247,7 +249,7 @@ function HeaderPage() {
           >
             <Box sx={style}>
               <Typography id="modal-modal-title" variant="h6" component="h2">
-                Change Password
+                <h4 style={{color:'#194F92'}}>Change Password</h4>
               </Typography>
 
               <TextField
@@ -255,7 +257,7 @@ function HeaderPage() {
                 label="Current Password"
                 variant="outlined"
                 type="password"
-                sx={{ marginTop: "10px" }}
+                sx={{ marginTop: "5px" }}
                 value={newPasswordData.oldPassword}
                 onChange={(e) => oldPasswordHandler(e)}
               />
