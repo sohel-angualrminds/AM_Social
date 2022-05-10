@@ -196,7 +196,7 @@ post_router.put('/comment/:id', verifyToken, provideInfo, async (req, res) => {
             return res.status(201).send({
                 success: true,
                 message: "comment added",
-                comments: result2
+                data: result2
             })
         }
         else {
@@ -240,7 +240,7 @@ post_router.put('/like/:id', verifyToken, provideInfo, async (req, res) => {
                 { new: true }
             )
 
-            res.status(200).send({ success: true, message: "The post has been liked", likeCount: r.likesCount });
+            res.status(200).send({ success: true, message: "The post has been liked", likeCount: r.likesCount, data: r });
         } else {
             await post.updateOne({ $pull: { likes: req.id } });
             let s = await Post_Model.findOne({ _id: req.params.id });
@@ -251,7 +251,7 @@ post_router.put('/like/:id', verifyToken, provideInfo, async (req, res) => {
             },
                 { new: true }
             )
-            res.status(200).send({ success: true, message: "The post has been disliked", likeCount: r.likesCount });;
+            res.status(200).send({ success: true, message: "The post has been disliked", likeCount: r.likesCount, data: r });
         }
     } catch (err) {
         console.log(err)
