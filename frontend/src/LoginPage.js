@@ -6,9 +6,9 @@ import { GoogleLogin } from 'react-google-login'
 import { useNavigate } from 'react-router-dom'
 import ReCAPTCHA from "react-google-recaptcha"
 import axios from 'axios'
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-  
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
+   
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -75,6 +75,8 @@ function LoginPage(props) {
         })
     }
 
+    const [errorMessage,setErrorMessage] = React.useState('')
+
     const loginHandler = async () => {
         setClickLogin(true)
 
@@ -91,6 +93,8 @@ function LoginPage(props) {
             })
             .catch(error => {
                 console.log(error)
+                console.log(error.response.data.message)
+                setErrorMessage(error.response.data.message)
                 checkLoggedIn(false);
                 handleClick()
             })
@@ -167,7 +171,7 @@ function LoginPage(props) {
 
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                    Enter Valid Data!
+                    {errorMessage && errorMessage}!
                 </Alert>
             </Snackbar>
 

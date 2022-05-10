@@ -12,7 +12,14 @@ import Button from '@mui/material/Button'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Stack } from '@mui/material'
-  
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+   
 const style = {
     position: 'absolute',
     top: '50%',
@@ -116,10 +123,29 @@ function HeaderPage() {
         })
     }
 
+    const [open4, setOpen4] = React.useState(false);
+
+    const handleClick4 = () => {
+      setOpen4(true);
+    };
+
+    const handleClose4 = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+
+      setOpen4(false);
+    };
+
+
+
     const [passwordCheck,setPasswordCheck] = React.useState('')
     const [bothPasswordCheck,setBothPassword] = React.useState('')
+
+    const [toggle,setToggle] = React.useState(false)
  
     const changePasswordHandler = () => {
+      setToggle(true)
       console.log(userData.userInfo._id);
 
       var hasNumber = /\d/;
@@ -127,14 +153,6 @@ function HeaderPage() {
         const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
         return specialChars.test(str);
       }
-
-      // if (userData.password.length <= 5) {
-      //   setCheckPassword("Minimum length of password is 6");
-      // } else if (!hasNumber.test(userData.password)) {
-      //   setCheckPassword("Password contain at least 1 Number");
-      // } else if (!containsSpecialChars(userData.password)) {
-      //   setCheckPassword("Password contain at least 1 Symbol");
-      // }
 
       if(newPasswordData.password.length <= 5)
       {
@@ -147,11 +165,21 @@ function HeaderPage() {
       else if (!containsSpecialChars(newPasswordData.password)) {
         setPasswordCheck("Password contain at least 1 Symbol");
       } 
-      else if(newPasswordData.password !== newPasswordData.confirmPassword)
+      else 
+      {
+        setPasswordCheck('')
+      }
+      
+      if(newPasswordData.password !== newPasswordData.confirmPassword)
       {
             setBothPassword('new password and confirm password should be same')
       }
-      else {
+      else
+      {
+        setBothPassword('')
+      }
+      if(newPasswordData.password.length >=6 && hasNumber.test(newPasswordData.password) && containsSpecialChars(newPasswordData.password) && newPasswordData.password === newPasswordData.confirmPassword)
+      {
           setPasswordCheck('')
           setBothPassword('')
         axios
@@ -166,8 +194,9 @@ function HeaderPage() {
           )
           .then((response) => {
             console.log(response);
-            alert("password change successfully");
-            navigate("/mainpage");
+            // alert("password change successfully");
+            // navigate("/mainpage");
+            handleClick4()
           })
           .catch((error) => console.log(error));
       }
@@ -257,6 +286,7 @@ function HeaderPage() {
                 label="Current Password"
                 variant="outlined"
                 type="password"
+                error={toggle && newPasswordData.oldPassword==='' ? true : false}
                 sx={{ marginTop: "5px" }}
                 value={newPasswordData.oldPassword}
                 onChange={(e) => oldPasswordHandler(e)}
@@ -269,6 +299,7 @@ function HeaderPage() {
                 label="New Password"
                 variant="outlined"
                 type="password"
+                error={toggle && newPasswordData.password=="" ? true : false}
                 sx={{ marginTop: "10px" }}
                 value={newPasswordData.password}
                 onChange={(e) => passwordHandler(e)}
@@ -287,6 +318,7 @@ function HeaderPage() {
                 label="Confirm Password"
                 variant="outlined"
                 type="password"
+                error={toggle && newPasswordData.confirmPassword==='' ? true : false}
                 sx={{ marginTop: "10px" }}
                 value={newPasswordData.confirmPassword}
                 onChange={(e) => confirmPasswordHandler(e)}
@@ -309,6 +341,12 @@ function HeaderPage() {
               </Button>
             </Box>
           </Modal>
+          
+          <Snackbar open={open4} autoHideDuration={6000} onClose={handleClose4} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+            <Alert onClose={handleClose4} severity="success" sx={{ width: '100%' }}>
+              password change successfully!
+            </Alert>
+          </Snackbar>
         </Box>
       </div>
     );

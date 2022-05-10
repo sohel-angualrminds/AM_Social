@@ -1,6 +1,6 @@
 import React from 'react'
 import HeaderPage from './HeaderPage'
-import debounce from "lodash.debounce";
+import debounce from "lodash.debounce"
 import { styled } from '@mui/material/styles'
 import Card from '@mui/material/Card'
 import CardMedia from '@mui/material/CardMedia'
@@ -12,8 +12,8 @@ import Typography from '@mui/material/Typography'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '@mui/material/Button'
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box'
+import Modal from '@mui/material/Modal'
 import TextareaAutosize from '@mui/material/TextareaAutosize'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
@@ -22,10 +22,10 @@ import Skeleton from '@mui/material/Skeleton'
 import CardHeader from '@mui/material/CardHeader'
 import Avatar from '@mui/material/Avatar'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import InfiniteScroll from 'react-infinite-scroll-component';
-  
+import Snackbar from '@mui/material/Snackbar'
+import MuiAlert from '@mui/material/Alert'
+import InfiniteScroll from 'react-infinite-scroll-component'
+   
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -236,6 +236,18 @@ function MainPage() {
                         caption: ''
                     })
                     handleClick2()
+                    axios.get(`/feed/?page=${pageNumber}&limit=${limit}`, {
+                    headers: {
+                        Authorization: token1
+                    }
+                })
+                .then(response =>{
+                    console.log(response.data.data.results);
+                    setAllPostsData(response.data.data.results)
+                })
+                .catch(error => {
+                    console.log(error);
+                })
                 })
                 .catch(error => console.log(error))
         }
@@ -452,7 +464,7 @@ function MainPage() {
                                         postItem.comments.map((commentItem, commentIndex) => {
                                             return <Typography paragraph key={commentIndex} sx={{display: "inlineflex"}} >
                                                 <Avatar>{commentItem.firstName.split(' ')[0][0]}</Avatar>
-                                                {commentItem.comment}
+                                                {commentItem.firstName+ " " + commentItem.lastName + " : " + commentItem.comment}
                                             </Typography>
                                         })
                                     }

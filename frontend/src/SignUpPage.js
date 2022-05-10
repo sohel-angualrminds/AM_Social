@@ -11,7 +11,7 @@ import MuiAlert from '@mui/material/Alert';
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-    
+     
 function SignUpPage() 
 {
     const navigate = useNavigate()
@@ -28,6 +28,20 @@ function SignUpPage()
         }
 
         setOpen(false);
+    };
+
+    const [open2, setOpen2] = React.useState(false);
+
+    const handleClick2 = () => {
+        setOpen2(true);
+    };
+
+    const handleClose2 = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+
+        setOpen2(false);
     };
 
     const [userData,setUserData] = React.useState({
@@ -83,6 +97,9 @@ function SignUpPage()
     const [checkPassword,setCheckPassword] = React.useState('')
     const [checkConfirmPassword,setCheckConfirmPassword] = React.useState('')
 
+    const [errorMessage,setErrorMessage] = React.useState('')
+    const [successMessage,setSuccessMessage] = React.useState('')
+
     const signUpButtonHandler = () => {
         setClickSignUp(true)
         
@@ -124,10 +141,13 @@ function SignUpPage()
         axios.post('/user/signup',userData)
         .then(response => {
             console.log(response)
+            setSuccessMessage(response.data.message)
+            handleClick2()
         })
         .catch(error => {
             console.log(error)
-            console.log('Enter proper data');
+            // console.log('Enter proper data');
+            setErrorMessage(error.response.data.message)
             handleClick()
         })
     }
@@ -223,7 +243,13 @@ function SignUpPage()
 
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
                 <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                    Enter Proper data!
+                    {errorMessage && errorMessage}!
+                </Alert>
+            </Snackbar>
+
+            <Snackbar open={open2} autoHideDuration={6000} onClose={handleClose2} anchorOrigin={{ vertical:'top', horizontal:'center' }}>
+                <Alert onClose={handleClose2} severity="success" sx={{ width: '100%' }}>
+                    {successMessage}!
                 </Alert>
             </Snackbar>
 

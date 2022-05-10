@@ -24,7 +24,7 @@ import Avatar from "@mui/material/Avatar";
 import countryCodes from "country-codes-list";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { join } from "country-codes-list/countriesData";
- 
+  
 const myCountryCodesObject = countryCodes.customList(
   "countryCode",
   "[{countryCode}] {countryNameEn}: +{countryCallingCode}"
@@ -205,8 +205,9 @@ function EditPage() {
       })
       .then((response) => {
         console.log(response);
-        handleClick();
         navigate("/mainpage");
+        handleClick();
+        
         // localStorage.setItem('loginUserData',JSON.stringify(newUserData))
       })
       .catch((error) => {
